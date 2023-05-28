@@ -1,0 +1,108 @@
+# MinimalList
+
+## App
+* *Criar um arsenal de filmes e animes que permita o usuário fazer reviews, adicionar a lista de favoritos e marque que episiodio ele parou* .
+
+## DB
+*  User
+	*  id
+	*  nickname
+	*  email
+	*  password
+	*  image
+	*  imageBackground
+	*  description
+	*  created_at
+	*  updated_at
+
+*  UserLibraries  User: One->Many
+	*  id
+	*  id_content
+	*  id_review -> NULL
+	*  episode
+	*  status_content
+	*  created_at
+	*  updated_at
+
+*  Review 
+	*  id
+	*  id_user
+	*  id_content
+	*  rate
+	*  title
+	*  text
+	*  spollier
+	*  created_at
+	*  updated_at
+
+*  ReviewsContents -> ManyToMany
+	* id_review
+	* id_content
+
+*  Content
+	*  id
+	*  duration -> string = "01:00h" || " 1ep "
+	*  season -> NULL
+	*  title
+	*  description
+	*  id_category
+	*  produce
+	*  date
+	* created_at
+	* updated_at
+
+*  Category
+	*  id
+	*  name
+	*  created_at
+
+*  UsersAchievement (ManyToMany)
+	* id  
+	*  id_user
+	* id_achievement
+ 
+*  Achievement
+	*  id
+	* id_user
+	*  icon
+	*  name
+	*  status
+
+
+--- 
+## Requisitos
+-- 
+* User
+    * [x] Authenticação com jwt
+    * [x] Criar usuário
+    * [x] Efetuar login
+    * [x] Efetuar logou
+    * [x] Accessar o perfil de usuário
+    * [] Atualizar perfil
+    * [] Atualizar image do perfil
+    * [] Atualizar image do background do perfil
+    * [] Deletar conta
+    * [] Acessar Usuário Reviews
+
+* Review
+    *  [] ListByContent
+    *  [] ListByUser -> (id => 1)
+    *  [] Add
+    *  [] Update
+    *  [] Delete
+
+* Content: 
+    *  [] ListAll (Rate)
+    *  [] GetOne (Rate, Reviews)
+    *  [] Search
+ 
+* Category
+    * [] ListAll
+    * [] ListById
+
+* Achievement
+    * [] add
+    * [] listAll
+    * [] listByUser
+
+--
