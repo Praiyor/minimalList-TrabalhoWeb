@@ -3,11 +3,19 @@ package com.dsw.trabalho.minimalList.controller.api;
 import com.dsw.trabalho.minimalList.dto.ProfileRequestDTO;
 import com.dsw.trabalho.minimalList.dto.UserRegisterDTO;
 import com.dsw.trabalho.minimalList.dto.UserSignInDTO;
+import com.dsw.trabalho.minimalList.helper.AuthHelper;
 import com.dsw.trabalho.minimalList.model.User;
 import com.dsw.trabalho.minimalList.repository.UserRepository;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
+
+import java.security.SecureRandom;
+import java.util.Base64;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -25,7 +33,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class UserController {
     private final UserRepository repository;
+    private HttpServletRequest request;
+    private AuthHelper authHelper;
 
+    // TODO - make tests
+    // TODO - make interceptor for handle user
+    
     @GetMapping("/profile/{id}")
     public ResponseEntity<Object> getProfile(@PathVariable Integer id) {
         Optional<User> user = repository.findById(id);
@@ -46,7 +59,14 @@ public class UserController {
         }
 
         User newUser = User.builder().email(registerDTO.getEmail()).password(registerDTO.getPassword()).build();
+
+        String token = authHelper.generateToken();
+        newUser.setToken(token);
         repository.save(newUser);
+        
+        // authenticate user, redirect to profile page
+        HttpSession httpSession = request.getSession();
+        httpSession.setAttribute("user", newUser);
 
         return ResponseEntity.ok(newUser);
     }
@@ -63,7 +83,17 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Email or password incorrect");
         }
 
-        return ResponseEntity.ok(user.get());
+        User userLogged = user.get();
+
+        // generate token
+        String token = authHelper.generateToken();
+        userLogged.setToken(token);
+        
+        // put user into session
+        HttpSession httpSession = request.getSession();
+        httpSession.setAttribute("user", userLogged);
+
+        return ResponseEntity.ok(userLogged);
     }
 
     @PutMapping("/profile/{id}")
@@ -82,5 +112,19 @@ public class UserController {
         repository.save(user);
 
         return ResponseEntity.status(HttpStatus.OK).body(user);
+    }
+
+    @GetMapping("/logout")
+    public ResponseEntity<Object> logout() {
+        HttpSession httpSession = request.getSession(false);
+        if (httpSession != null) {
+            httpSession.invalidate();
+        }
+
+        User user = (User) httpSession.getAttribute("user");
+        user.setToken(null);
+        repository.save(user);
+
+        return ResponseEntity.ok().build();
     }
 }

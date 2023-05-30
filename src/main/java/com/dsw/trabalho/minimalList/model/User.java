@@ -69,4 +69,6 @@ public class User {
 
     @OneToMany
     private List<UserLibrary> userLibrary;
+
+    private String token;
 }
