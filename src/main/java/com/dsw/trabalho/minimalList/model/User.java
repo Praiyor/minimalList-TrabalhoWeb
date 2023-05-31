@@ -17,6 +17,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.Value;
+
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 
@@ -30,6 +33,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @AllArgsConstructor
 @Entity
 @Table(name = "users")
+@ConfigurationProperties("api.url")
 public class User {
 
     @Id
@@ -73,4 +77,16 @@ public class User {
     private String token;
 
     private String imagePath;
+
+    public String getImagePathComplete() {
+        String path = "http://localhost:8080/";
+        
+        return path + imagePath + "/"+ image;
+    }
+
+    public String getBackgroundPathComplete() {
+        String path = "http://localhost:8080/";
+        
+        return path + imagePath + "/"+ background;
+    }
 }

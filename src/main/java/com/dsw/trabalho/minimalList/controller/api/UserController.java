@@ -37,7 +37,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RequiredArgsConstructor
 public class UserController {
     private final UserRepository repository;
-    private String pathUpload = "src/main/resources/static/images";
+    private String pathUpload = "assets/images";
 
     @GetMapping("/profile/{id}")
     public ResponseEntity<Object> getProfile(@PathVariable Integer id) {
@@ -150,8 +150,7 @@ public class UserController {
         try {
 
             FileService.saveFile(uploadDir, fileName, file);
-
-            user.setImage(fileName);
+            user.setBackground(fileName);
             user.setImagePath(uploadDir);
             repository.save(user);
         } catch (IOException e) {
@@ -170,26 +169,5 @@ public class UserController {
 
         repository.deleteById(id);
         return ResponseEntity.status(HttpStatus.OK).body("User deleted!");
-    }
-
-    @GetMapping("/profile/image/{id}")
-    public ResponseEntity<Object> getProfileImages(@PathVariable int id) {
-        Optional<User> user = repository.findById(id);
-
-        if (!user.isPresent()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found!");
-        }
-
-        User userLogged = user.get();
-
-        System.out.println(userLogged);
-        Resource imageResource = new ClassPathResource(userLogged.getImagePath() + "/"+ userLogged.getImage());
-        if (!imageResource.exists()) {
-            imageResource = new ClassPathResource("src/main/resources/static/images/profile/default.jpeg");
-        }
-
-        return ResponseEntity.status(HttpStatus.OK)
-                .contentType(MediaType.IMAGE_JPEG)
-                .body(imageResource);
     }
 }

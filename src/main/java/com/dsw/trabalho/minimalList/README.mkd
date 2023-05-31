@@ -78,8 +78,8 @@
     * [x] Efetuar login
     * [x] Accessar o perfil de usuário
     * [x] Atualizar perfil
-    * [] Atualizar image do perfil
-    * [] Atualizar image do background do perfil
+    * [x] Atualizar image do perfil
+    * [x] Atualizar image do background do perfil
     * [x] Deletar conta
     * [] Acessar Usuário Reviews
 
