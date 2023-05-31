@@ -51,7 +51,7 @@ public class User {
 
     @Column(nullable = true)
     @Nullable
-    private String imageBackground;
+    private String background;
 
     @Column(nullable = true)
     @Nullable
@@ -71,4 +71,6 @@ public class User {
     private List<UserLibrary> userLibrary;
 
     private String token;
+
+    private String imagePath;
 }

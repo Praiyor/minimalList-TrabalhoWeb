@@ -14,7 +14,6 @@ import lombok.Builder.Default;
 public class ProfileRequestDTO {
     private Integer id;
     private String nickname;
-    private String password;
     private String description;
 }
 

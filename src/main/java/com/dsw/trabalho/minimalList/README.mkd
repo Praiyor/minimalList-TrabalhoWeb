@@ -76,12 +76,11 @@
     * [x] Authenticação com jwt
     * [x] Criar usuário
     * [x] Efetuar login
-    * [x] Efetuar logou
     * [x] Accessar o perfil de usuário
-    * [] Atualizar perfil
+    * [x] Atualizar perfil
     * [] Atualizar image do perfil
     * [] Atualizar image do background do perfil
-    * [] Deletar conta
+    * [x] Deletar conta
     * [] Acessar Usuário Reviews
 
 * Review
