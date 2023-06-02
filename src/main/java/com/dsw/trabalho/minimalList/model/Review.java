@@ -16,6 +16,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -36,11 +37,9 @@ public class Review {
     @JoinColumn(name = "id_user")
     private User user;
 
-    // library 
-    @OneToMany
-    private List<UserLibrary> userLibrary;
-
     // id_content
+    @OneToOne
+    private Content content;
 
     private String title;
     private Float rate;

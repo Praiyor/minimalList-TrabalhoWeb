@@ -81,18 +81,21 @@
     * [x] Atualizar image do perfil
     * [x] Atualizar image do background do perfil
     * [x] Deletar conta
-    * [] Acessar Usuário Reviews
 
-* Review
-    *  [] ListByContent
-    *  [] ListByUser -> (id => 1)
-    *  [] Add
-    *  [] Update
-    *  [] Delete
+* UserLibrary
+    * [] 
+
+* Review -> Falta testar
+    *  [x] ListByContent (Verificar se precisa)
+    *  [x] ListByUser -> (id => 1)
+    *  [] ListById -> (Verificar se precisa)
+    *  [x] Add
+    *  [x] Update 
+    *  [x] Delete
 
 * Content: 
-    *  [] ListAll (Rate)
-    *  [] GetOne (Rate, Reviews)
+    *  [x] ListAll (fazer uma media de Rate) - Falta testar (precisar popular o banco)
+    *  [x] GetOne (fazer uma media de Rate,  pegar todas as Reviews) - Falta testar (precisar popular o banco)
     *  [] Search
  
 * Category
