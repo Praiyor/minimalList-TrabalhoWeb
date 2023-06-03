@@ -28,6 +28,9 @@ public class Content {
     private Integer id;
 
     @Column(nullable = false)
+    private String name;
+
+    @Column(nullable = false)
     private String duration;
 
     @Column(nullable = true)

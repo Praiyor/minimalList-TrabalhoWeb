@@ -33,4 +33,14 @@ public class ContentController {
 
         return ResponseEntity.status(HttpStatus.OK).body(optionalContent.get());
     }
+
+    @GetMapping("/{name}")
+    public ResponseEntity<Object> searchByName(@PathVariable String name){
+        List<Content> content = contentRepository.findByNameLike(name);
+        if (content == null){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Content not found!");
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(content);
+    }
 }
