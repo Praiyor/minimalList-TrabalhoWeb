@@ -6,6 +6,7 @@
 ## DB
 *  User
 	*  id
+    *  id_library (OneToONe)
 	*  nickname
 	*  email
 	*  password
@@ -17,8 +18,8 @@
 
 *  UserLibraries  User: One->Many
 	*  id
-	*  id_user
-	*  id_content
+	*  id_user (OneToMany)
+	*  id_content (OneToOne)
 	*  episode
 	*  status_content
 	*  created_at
@@ -26,8 +27,8 @@
 
 *  Review 
 	*  id
-	*  id_user
-	*  id_content
+	*  id_user (OneToOne)
+	*  id_content (OneToMany)
 	*  rate
 	*  title
 	*  text
@@ -35,12 +36,9 @@
 	*  created_at
 	*  updated_at
 
-*  ReviewsContents -> ManyToMany
-	* id_review
-	* id_content
-
 *  Content
 	*  id
+    *  name 
 	*  duration -> string = "01:00h" || " 1ep "
 	*  season -> NULL
 	*  title
@@ -48,8 +46,8 @@
 	*  id_category
 	*  produce
 	*  date
-	* created_at
-	* updated_at
+	*  created_at
+	*  updated_at
 
 *  Category
 	*  id
@@ -57,17 +55,16 @@
 	*  created_at
 
 *  UsersAchievement (ManyToMany)
-	* id  
+	*  id  
 	*  id_user
-	* id_achievement
+	*  id_achievement
  
 *  Achievement
 	*  id
-	* id_user
+	*  id_user
 	*  icon
 	*  name
 	*  status
-
 
 --- 
 ## Requisitos
@@ -82,17 +79,16 @@
     * [x] Atualizar image do background do perfil
     * [x] Deletar conta
 
-* UserLibrary
+* UserLibrary -> (AJUSTAR)
     * [x] Add
     * [x] Update
     * [x] FindAllByUser
     * [x] getOneByContent
     * [x] Delete
 
-* Review -> Falta testar
+* Review ->  (AJUSTAR)
     *  [x] ListByContent (Verificar se precisa)
     *  [x] ListByUser -> (id => 1)
-    *  [] ListById -> (Verificar se precisa)
     *  [x] Add
     *  [x] Update 
     *  [x] Delete
@@ -100,15 +96,19 @@
 * Content: 
     *  [x] ListAll (fazer uma media de Rate) - Falta testar (precisar popular o banco)
     *  [x] GetOne (fazer uma media de Rate,  pegar todas as Reviews) - Falta testar (precisar popular o banco)
-    *  [] Search
+    *  [x] Search (name) -> falta testar
+    *  [] FindAllSeason 
+    *  [] FindAllBySeason
+    *  [] FindAllByCategory
  
 * Category
     * [] ListAll
-    * [] ListById
+    * [] ListByName
 
 * Achievement
     * [] add
     * [] listAll
     * [] listByUser
-
 --
+
+
