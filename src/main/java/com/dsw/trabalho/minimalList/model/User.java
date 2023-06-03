@@ -71,9 +71,6 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Review> reviews;
 
-    @OneToMany
-    private List<UserLibrary> userLibrary;
-
     private String token;
 
     private String imagePath;

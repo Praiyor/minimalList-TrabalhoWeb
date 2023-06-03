@@ -14,6 +14,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -30,19 +31,15 @@ public class UserLibrary {
     @Id
     @GeneratedValue
     private Integer id;
-
-    // id_content
-    @OneToOne
-    @JoinColumn(name = "id_content", referencedColumnName="id", nullable = true)
-    private Content content;
-
-    // id_user
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_user", referencedColumnName = "id")
-    private User user;
-
     private String episode;
     private String statusCotent;
+    
+    @OneToOne
+    private Content content;
+
+    @ManyToOne
+    @JoinColumn(name = "id_user")
+    private User user;
 
     @CreatedDate
     private LocalDateTime createdAt;

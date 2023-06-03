@@ -70,23 +70,23 @@
 ## Requisitos
 -- 
 * User
-    * [x] Authenticação com jwt
-    * [x] Criar usuário
-    * [x] Efetuar login
-    * [x] Accessar o perfil de usuário
-    * [x] Atualizar perfil
-    * [x] Atualizar image do perfil
-    * [x] Atualizar image do background do perfil
-    * [x] Deletar conta
+    *  [x] Authenticação com jwt
+    *  [x] Criar usuário
+    *  [x] Efetuar login
+    *  [x] Accessar o perfil de usuário
+    *  [x] Atualizar perfil
+    *  [x] Atualizar image do perfil
+    *  [x] Atualizar image do background do perfil
+    *  [x] Deletar conta
 
-* UserLibrary -> (AJUSTAR)
-    * [x] Add
-    * [x] Update
-    * [x] FindAllByUser
-    * [x] getOneByContent
-    * [x] Delete
+* UserLibrary
+    *  [x] Add
+    *  [x] Update
+    *  [x] FindAllByUser
+    *  [x] getOneByContent
+    *  [x] Delete
 
-* Review ->  (AJUSTAR)
+* Review
     *  [x] ListByContent (Verificar se precisa)
     *  [x] ListByUser -> (id => 1)
     *  [x] Add
@@ -102,13 +102,13 @@
     *  [] FindAllByCategory
  
 * Category
-    * [] ListAll
-    * [] ListByName
+    *  [] ListAll
+    *  [] ListByName
 
 * Achievement
-    * [] add
-    * [] listAll
-    * [] listByUser
+    *  [] add
+    *  [] listAll
+    *  [] listByUser
 --
 
 

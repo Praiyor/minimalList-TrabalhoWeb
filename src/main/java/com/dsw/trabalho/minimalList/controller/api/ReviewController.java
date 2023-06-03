@@ -63,10 +63,10 @@ public class ReviewController {
     @PutMapping("/{id}")
     public ResponseEntity<Object> update(
             @PathVariable(value = "id") Integer id, @RequestBody ReviewRequestDTO reviewDto) {
+
         User user = userRepository.findById(reviewDto.getIdUser()).orElseGet(null);
         Content content = contentRepository.findById(reviewDto.getIdContent()).orElseGet(null);
         Review review= repository.findById(id).orElseGet(null);
-
         if (user == null || review == null || content == null) 
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized!");
 
@@ -76,9 +76,8 @@ public class ReviewController {
         review.setRate(reviewDto.getRate());
         review.setText(reviewDto.getText());
         review.setSpollier(reviewDto.isSpollier());
-        repository.save(review);
 
-        return ResponseEntity.status(HttpStatus.OK).body(review);
+        return ResponseEntity.status(HttpStatus.OK).body(repository.save(review));
     }
 
     @DeleteMapping("/{id}")

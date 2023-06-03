@@ -32,19 +32,17 @@ public class Review {
     @Id
     @GeneratedValue
     private Integer id;
-
-    @ManyToOne
-    @JoinColumn(name = "id_user")
-    private User user;
-
-    // id_content
-    @OneToOne
-    private Content content;
-
     private String title;
     private Float rate;
     private String text;
     private boolean spollier;
+
+    @OneToOne
+    private User user;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "content_id")
+    private Content content;
 
     @CreatedDate
     private LocalDateTime createdAt;

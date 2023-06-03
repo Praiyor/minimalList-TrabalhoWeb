@@ -53,7 +53,6 @@ public class UserLibraryController {
         if (user != null) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User not found!");
         if (content != null) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Content not found!");
 
-
         UserLibrary library = new UserLibrary();
         library.setUser(user);
         library.setContent(content);

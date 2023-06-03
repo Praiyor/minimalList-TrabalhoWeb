@@ -1,6 +1,8 @@
 package com.dsw.trabalho.minimalList.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
+
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -11,7 +13,9 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 
-import java.sql.Date;
+import java.util.Date;
+import java.util.List;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
@@ -35,17 +39,24 @@ public class Content {
 
     @Column(nullable = true)
     @Nullable
-    private String season;
+    private int season;
+
+    @Column(nullable = true)
+    private String image;
 
     private String title;
+
+    @Column(columnDefinition="text")
     private String description;
 
+    @OneToMany(mappedBy = "content", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Review> reviews; 
     //@OneToMany
     //private List<Category> idCategory;
 
-    private String produce;
+    private boolean produce;
 
-    private Date date;
+    private LocalDate date;
 
     @CreatedDate
     private LocalDateTime createdAt;
