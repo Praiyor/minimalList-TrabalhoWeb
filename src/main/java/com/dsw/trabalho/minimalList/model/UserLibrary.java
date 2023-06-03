@@ -12,7 +12,9 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -30,11 +32,9 @@ public class UserLibrary {
     private Integer id;
 
     // id_content
-    
-    // id_review
-    @ManyToOne
-    @JoinColumn(name = "id_review", referencedColumnName="id", nullable = true)
-    private Review review;
+    @OneToOne
+    @JoinColumn(name = "id_content", referencedColumnName="id", nullable = true)
+    private Content content;
 
     // id_user
     @ManyToOne(fetch = FetchType.LAZY)
@@ -42,7 +42,7 @@ public class UserLibrary {
     private User user;
 
     private String episode;
-    private String status_cotent;
+    private String statusCotent;
 
     @CreatedDate
     private LocalDateTime createdAt;

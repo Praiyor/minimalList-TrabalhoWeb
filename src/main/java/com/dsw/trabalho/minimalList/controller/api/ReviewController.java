@@ -15,7 +15,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.core.io.ClassPathResource;
@@ -54,7 +53,7 @@ public class ReviewController {
     }
 
     @GetMapping("/content/{id}")
-    public ResponseEntity<Object> findAllReviewsByContent(@PathVariable UUID idContent) {
+    public ResponseEntity<Object> findAllReviewsByContent(@PathVariable Integer idContent) {
         Content content = contentRepository.findById(idContent).orElseGet(null);
         List<Review> review = repository.findAllByContent(content);
 

@@ -13,7 +13,6 @@ import org.springframework.data.annotation.LastModifiedBy;
 
 import java.sql.Date;
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Data
 @Builder
@@ -26,7 +25,7 @@ public class Content {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private UUID id;
+    private Integer id;
 
     @Column(nullable = false)
     private String duration;

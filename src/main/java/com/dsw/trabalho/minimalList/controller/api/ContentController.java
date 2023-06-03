@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -25,7 +24,7 @@ public class ContentController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Object> getOne(@PathVariable UUID id){
+    public ResponseEntity<Object> getOne(@PathVariable Integer id){
         Optional<Content> optionalContent = contentRepository.findById(id);
 
         if(!optionalContent.isPresent()){

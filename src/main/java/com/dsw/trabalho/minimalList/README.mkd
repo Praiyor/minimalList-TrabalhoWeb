@@ -17,8 +17,8 @@
 
 *  UserLibraries  User: One->Many
 	*  id
+	*  id_user
 	*  id_content
-	*  id_review -> NULL
 	*  episode
 	*  status_content
 	*  created_at
@@ -83,7 +83,11 @@
     * [x] Deletar conta
 
 * UserLibrary
-    * [] 
+    * [x] Add
+    * [x] Update
+    * [x] FindAllByUser
+    * [x] getOneByContent
+    * [x] Delete
 
 * Review -> Falta testar
     *  [x] ListByContent (Verificar se precisa)
