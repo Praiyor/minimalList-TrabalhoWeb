@@ -1,6 +1,7 @@
 package com.dsw.trabalho.minimalList.helper;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,7 +10,6 @@ import org.springframework.stereotype.Component;
 
 import com.dsw.trabalho.minimalList.model.Content;
 import com.dsw.trabalho.minimalList.repository.ContentRepository;
-import com.dsw.trabalho.minimalList.service.ApiService;
 
 import lombok.AllArgsConstructor;
 
@@ -18,14 +18,12 @@ import lombok.AllArgsConstructor;
 public class DefaultRecordsPopulator implements CommandLineRunner {
 
     private ContentRepository contentRepository;
-    private ApiService apiService;
 
     @Override
     public void run(String... args) {
         // Check if the table is empty
 
         if (contentRepository.findAll().isEmpty()) {
-            // String response =
             // apiService.fetchGetDataApi("https://api.jikan.moe/v4/top/anime");
             String[] namesContents = {
                     "Breaking Bad",
@@ -135,6 +133,8 @@ public class DefaultRecordsPopulator implements CommandLineRunner {
                 content.setDescription(descriptionsContents[i]);
                 content.setImage(imagesContents[i]);
                 content.setDuration(durationsContents[i]);
+                content.setCreatedAt(LocalDateTime.now());
+                content.setUpdatedAt(LocalDateTime.now());
                 contents.add(content);
             }
 

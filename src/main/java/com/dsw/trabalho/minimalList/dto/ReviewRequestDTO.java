@@ -1,8 +1,5 @@
 package com.dsw.trabalho.minimalList.dto;
 
-import com.dsw.trabalho.minimalList.model.Content;
-import com.dsw.trabalho.minimalList.model.User;
-
 import lombok.Getter;
 import lombok.Setter;
 

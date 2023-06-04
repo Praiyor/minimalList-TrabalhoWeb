@@ -23,20 +23,18 @@ public class ContentController {
         return ResponseEntity.status(HttpStatus.OK).body(contentRepository.findAll());
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/find/{id}")
     public ResponseEntity<Object> getOne(@PathVariable Integer id){
-        Optional<Content> optionalContent = contentRepository.findById(id);
+        Content optionalContent = contentRepository.findById(id).orElseGet(null);
+        if(optionalContent == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Content not found!");
 
-        if(!optionalContent.isPresent()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Content not found!");
-        }
-
-        return ResponseEntity.status(HttpStatus.OK).body(optionalContent.get());
+        return ResponseEntity.status(HttpStatus.OK).body(optionalContent);
     }
 
-    @GetMapping("/{name}")
-    public ResponseEntity<Object> searchByName(@PathVariable String name){
-        List<Content> content = contentRepository.findByNameLike(name);
+    @GetMapping("/{search}")
+    public ResponseEntity<Object> searchByName(@PathVariable String search){
+        List<Content> content = contentRepository.findAllByNameOrTitle(search);
+        System.out.println("breaking");
         if (content == null){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Content not found!");
         }

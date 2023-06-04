@@ -1,23 +1,11 @@
 package com.dsw.trabalho.minimalList.controller.api;
 
-import com.dsw.trabalho.minimalList.dto.ProfileRequestDTO;
-import com.dsw.trabalho.minimalList.dto.UserRegisterDTO;
-import com.dsw.trabalho.minimalList.dto.UserSignInDTO;
-import com.dsw.trabalho.minimalList.model.User;
-import com.dsw.trabalho.minimalList.repository.UserRepository;
-import com.dsw.trabalho.minimalList.service.FileService;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Optional;
 import java.util.UUID;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -31,6 +19,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+
+import com.dsw.trabalho.minimalList.dto.ProfileRequestDTO;
+import com.dsw.trabalho.minimalList.dto.UserRegisterDTO;
+import com.dsw.trabalho.minimalList.dto.UserSignInDTO;
+import com.dsw.trabalho.minimalList.model.User;
+import com.dsw.trabalho.minimalList.repository.UserRepository;
+import com.dsw.trabalho.minimalList.service.FileService;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -58,26 +57,25 @@ public class UserController {
             HttpServletResponse response) {
         Optional<User> user = repository.findByEmail(registerDTO.getEmail());
 
-        if (user.isPresent()) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("User already exists!");
-        }
+        if (user.isPresent()) return ResponseEntity.status(HttpStatus.CONFLICT).body("User already exists!");
+        
 
-        User newUser = User.builder().email(registerDTO.getEmail()).password(registerDTO.getPassword()).build();
+        User newUser = new User();
+        newUser.setEmail(registerDTO.getEmail());
+        newUser.setNickname(registerDTO.getNickname());
+        newUser.setPassword(registerDTO.getPassword());
 
-        return ResponseEntity.ok(newUser);
+        return ResponseEntity.ok(repository.save(newUser));
     }
 
     @PostMapping("/login")
     public ResponseEntity<Object> signIn(@RequestBody UserSignInDTO userDto) {
         Optional<User> user = repository.findByEmail(userDto.getEmail());
 
-        if (!user.isPresent()) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("Email or password incorrect");
-        }
+        if (!user.isPresent()) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email or password incorrect");
 
-        if (!user.get().getPassword().equals(userDto.getPassword())) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("Email or password incorrect");
-        }
+        if (!user.get().getPassword().equals(userDto.getPassword())) 
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email or password incorrect");
 
         User userLogged = user.get();
 
