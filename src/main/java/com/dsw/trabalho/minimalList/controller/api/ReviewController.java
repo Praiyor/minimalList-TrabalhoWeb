@@ -58,11 +58,8 @@ public class ReviewController {
     public ResponseEntity<Object> update(
             @PathVariable(value = "id") Integer id, @RequestBody @Valid ReviewRequestDTO reviewDto)
             throws HandleException {
-
         Review review = repository.findById(id).orElseThrow(() -> new HandleException("Review not found!"));
-        Review reviewVerify = repository
-                .findByUserAndContent(reviewDto.getIdUser(), reviewDto.getIdContent())
-                .orElseThrow(() -> new HandleException("Review not found!"));
+        Review reviewVerify = repository.findByUserAndContent(reviewDto.getIdUser(), reviewDto.getIdContent());
 
         if (review != reviewVerify)
             throw new HandleException("Não é possível alterar review");
