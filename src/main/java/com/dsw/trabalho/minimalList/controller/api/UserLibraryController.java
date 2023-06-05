@@ -32,7 +32,7 @@ public class UserLibraryController {
 
     @GetMapping("/{idUser}")
     public ResponseEntity<Object> findAllContentByUser(@PathVariable Integer idUser) {
-        User user = userRepository.findById(idUser).orElseGet(null);
+        User user = userRepository.findById(idUser).orElse(null);
         if (user == null)  return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found!");
          
         return ResponseEntity.status(HttpStatus.OK).body(repository.findAllByUser(user));
@@ -40,16 +40,16 @@ public class UserLibraryController {
 
     @GetMapping("/{idUser}/content/{idContent}")
     public ResponseEntity<Object> getOneByContent(@PathVariable Integer idUser, @PathVariable Integer idContent) {
-        User user = userRepository.findById(idUser).orElseGet(null);
+        User user = userRepository.findById(idUser).orElse(null);
         if (user == null)  return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found!");
         
-        return ResponseEntity.status(HttpStatus.OK).body(repository.findByUserAndContent(user, contentRepository.findById(idContent).orElseGet(null)));
+        return ResponseEntity.status(HttpStatus.OK).body(repository.findByUserAndContent(user, contentRepository.findById(idContent).orElse(null)));
     }
 
     @PostMapping
     public ResponseEntity<Object> add(UserLibraryDTO libraryDTO) {
-        User user = userRepository.findById(libraryDTO.getIdUser()).orElseGet(null);
-        Content content = contentRepository.findById(libraryDTO.getIdContent()).orElseGet(null);
+        User user = userRepository.findById(libraryDTO.getIdUser()).orElse(null);
+        Content content = contentRepository.findById(libraryDTO.getIdContent()).orElse(null);
         if (user != null) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User not found!");
         if (content != null) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Content not found!");
 
@@ -65,7 +65,7 @@ public class UserLibraryController {
     // update
     @PutMapping("/{id}")
     public ResponseEntity<Object> update(@PathVariable Integer id, UserLibraryDTO libraryDTO) {
-        UserLibrary userLibrary = repository.findById(id).orElseGet(null);
+        UserLibrary userLibrary = repository.findById(id).orElse(null);
         if (userLibrary == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("UserLibrary not found!");
         if  (userLibrary.getUser().getId() != libraryDTO.getIdUser() && userLibrary.getContent().getId() != libraryDTO.getIdContent()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User or Content not found!");
@@ -79,7 +79,7 @@ public class UserLibraryController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> delete(@PathVariable Integer id) {
-        UserLibrary userLibrary = repository.findById(id).orElseGet(null);
+        UserLibrary userLibrary = repository.findById(id).orElse(null);
         if (userLibrary == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("UserLibrary not found!");
         repository.delete(userLibrary);
         return ResponseEntity.status(HttpStatus.OK).body("UserLibrary deleted!");

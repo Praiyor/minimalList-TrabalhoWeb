@@ -25,7 +25,7 @@ public class ContentController {
 
     @GetMapping("/find/{id}")
     public ResponseEntity<Object> getOne(@PathVariable Integer id){
-        Content optionalContent = contentRepository.findById(id).orElseGet(null);
+        Content optionalContent = contentRepository.findById(id).orElse(null);
         if(optionalContent == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Content not found!");
 
         return ResponseEntity.status(HttpStatus.OK).body(optionalContent);

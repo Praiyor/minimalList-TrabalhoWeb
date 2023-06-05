@@ -30,7 +30,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Entity
 @Table(name = "users")
-@ConfigurationProperties("api.url")
 public class User {
 
     @Id

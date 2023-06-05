@@ -1,17 +1,16 @@
 package com.dsw.trabalho.minimalList.controller.api;
 
 import com.dsw.trabalho.minimalList.dto.ReviewRequestDTO;
+import com.dsw.trabalho.minimalList.helper.HandleException;
 import com.dsw.trabalho.minimalList.model.Content;
 import com.dsw.trabalho.minimalList.model.Review;
 import com.dsw.trabalho.minimalList.model.User;
 import com.dsw.trabalho.minimalList.repository.ContentRepository;
 import com.dsw.trabalho.minimalList.repository.ReviewRepository;
 import com.dsw.trabalho.minimalList.repository.UserRepository;
-
-import java.util.ArrayList;
+import jakarta.validation.Valid;
 import java.util.List;
 import java.util.Optional;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,9 +33,9 @@ public class ReviewController {
     private final UserRepository userRepository;
     private final ContentRepository contentRepository;
 
-    @GetMapping("/user/{idUser}")
-    public ResponseEntity<Object> findAllReviewsByUser(@PathVariable Integer idUser) {
-        Optional<User> userOptional = userRepository.findById(idUser);
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<Object> findAllReviewsByUser(@PathVariable Integer userId) {
+        Optional<User> userOptional = userRepository.findById(userId);
         if (userOptional.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found!");
         }
@@ -47,9 +46,9 @@ public class ReviewController {
         return ResponseEntity.status(HttpStatus.OK).body(reviews);
     }
 
-    @GetMapping("/content/{id}")
-    public ResponseEntity<Object> findAllReviewsByContent(@PathVariable Integer idContent) {
-        Content content = contentRepository.findById(idContent).orElseGet(null);
+    @GetMapping("/content/{contentId}")
+    public ResponseEntity<Object> findAllReviewsByContent(@PathVariable Integer contentId) {
+        Content content = contentRepository.findById(contentId).orElse(null);
         List<Review> review = repository.findAllByContent(content);
 
         return ResponseEntity.status(HttpStatus.OK).body(review);
@@ -57,19 +56,20 @@ public class ReviewController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Object> update(
-            @PathVariable(value = "id") Integer id, @RequestBody ReviewRequestDTO reviewDto) {
+            @PathVariable(value = "id") Integer id, @RequestBody @Valid ReviewRequestDTO reviewDto)
+            throws HandleException {
 
-        User user = userRepository.findById(reviewDto.getIdUser()).orElseGet(null);
-        Content content = contentRepository.findById(reviewDto.getIdContent()).orElseGet(null);
-        Review review = repository.findById(id).orElseGet(null);
-        if (user == null || review == null || content == null)
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized!");
+        Review review = repository.findById(id).orElseThrow(() -> new HandleException("Review not found!"));
+        Review reviewVerify = repository
+                .findByUserAndContent(reviewDto.getIdUser(), reviewDto.getIdContent())
+                .orElseThrow(() -> new HandleException("Review not found!"));
 
-        if (review.getUser().getId() != user.getId())
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized!");
+        if (review != reviewVerify)
+            throw new HandleException("Não é possível alterar review");
 
         review.setRate(reviewDto.getRate());
         review.setText(reviewDto.getText());
+        review.setTitle(reviewDto.getTitle());
         review.setSpollier(reviewDto.isSpollier());
 
         return ResponseEntity.status(HttpStatus.OK).body(repository.save(review));
@@ -82,7 +82,7 @@ public class ReviewController {
     }
 
     @PostMapping
-    public ResponseEntity<Object> addReview(@RequestBody ReviewRequestDTO reviewDto) {
+    public ResponseEntity<Object> addReview(@RequestBody @Valid ReviewRequestDTO reviewDto) {
         Optional<User> userExist = userRepository.findById(reviewDto.getIdUser());
         Optional<Content> contentExist = contentRepository.findById(reviewDto.getIdContent());
         if (!userExist.isPresent())
@@ -105,9 +105,9 @@ public class ReviewController {
         review.setRate(reviewDto.getRate());
         review.setText(reviewDto.getText());
         review.setSpollier(reviewDto.isSpollier());
+        review.setTitle(reviewDto.getTitle());
         repository.save(review);
 
         return ResponseEntity.status(HttpStatus.OK).body(review);
     }
-
 }

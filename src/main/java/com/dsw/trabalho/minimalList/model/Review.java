@@ -5,6 +5,8 @@ import java.time.LocalDateTime;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -39,7 +41,7 @@ public class Review {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "content_id")
     private Content content;
 
@@ -60,4 +62,13 @@ public class Review {
         updatedAt = LocalDateTime.now();
     }
 
+    @JsonBackReference
+    public Content getContent(){
+        return content;
+    }
+
+    @JsonBackReference
+    public Content getUser(){
+        return content;
+    }
 }
