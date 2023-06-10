@@ -106,9 +106,9 @@
     *  [x] ListByName
 
 * Achievement
-    *  [] add
-    *  [] listAll
-    *  [] listByUser
+    *  [x] add
+    *  [x] listAll
+    *  [x] listByUser
 --
 
 
