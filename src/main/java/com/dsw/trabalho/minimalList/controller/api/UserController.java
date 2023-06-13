@@ -23,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.dsw.trabalho.minimalList.dto.ProfileRequestDTO;
 import com.dsw.trabalho.minimalList.dto.UserRegisterDTO;
 import com.dsw.trabalho.minimalList.dto.UserSignInDTO;
+import com.dsw.trabalho.minimalList.helper.HandleException;
 import com.dsw.trabalho.minimalList.model.User;
 import com.dsw.trabalho.minimalList.repository.UserRepository;
 import com.dsw.trabalho.minimalList.service.FileService;
@@ -40,25 +41,19 @@ public class UserController {
     private String pathUpload = "assets/images";
 
     @GetMapping("/profile/{id}")
-    public ResponseEntity<Object> getProfile(@PathVariable Integer id) {
-        Optional<User> user = repository.findById(id);
+    public ResponseEntity<Object> getProfile(@PathVariable Integer id) throws HandleException {
+        User user = repository.findById(id).orElseThrow(() -> new HandleException("User not found!"));
 
-        if (!user.isPresent()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found!");
-        }
-
-        return ResponseEntity.status(HttpStatus.OK).body(user.get());
+        return ResponseEntity.status(HttpStatus.OK).body(user);
     }
 
     @PostMapping("/register")
     public ResponseEntity<Object> register(
             @RequestBody UserRegisterDTO registerDTO,
             HttpServletRequest request,
-            HttpServletResponse response) {
+            HttpServletResponse response) throws HandleException {
         Optional<User> user = repository.findByEmail(registerDTO.getEmail());
-
-        if (user.isPresent()) return ResponseEntity.status(HttpStatus.CONFLICT).body("User already exists!");
-        
+        if (user.isPresent()) throw new HandleException("User already exists!");
 
         User newUser = new User();
         newUser.setEmail(registerDTO.getEmail());
@@ -69,29 +64,18 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Object> signIn(@RequestBody UserSignInDTO userDto) {
-        Optional<User> user = repository.findByEmail(userDto.getEmail());
+    public ResponseEntity<Object> signIn(@RequestBody UserSignInDTO userDto) throws HandleException {
+        User user = repository.findByEmail(userDto.getEmail()).orElseThrow(() -> new HandleException("Email or password incorrect"));
+        if (!user.getPassword().equals(userDto.getPassword())) 
+            throw new HandleException("Email or password incorrect");
 
-        if (!user.isPresent()) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email or password incorrect");
-
-        if (!user.get().getPassword().equals(userDto.getPassword())) 
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email or password incorrect");
-
-        User userLogged = user.get();
-
-        return ResponseEntity.ok(userLogged);
+        return ResponseEntity.ok(user);
     }
 
     @PutMapping("/profile/{id}")
     public ResponseEntity<Object> updateProfile(
-            @PathVariable(value = "id") Integer id, @RequestBody ProfileRequestDTO profileDto) {
-        Optional<User> userOptional = repository.findById(id);
-
-        if (!userOptional.isPresent()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found!");
-        }
-
-        User user = userOptional.get();
+            @PathVariable(value = "id") Integer id, @RequestBody ProfileRequestDTO profileDto) throws HandleException {
+        User user = repository.findById(id).orElseThrow(() -> new HandleException("User not found"));
 
         BeanUtils.copyProperties(profileDto, user);
         user.setId(id);
@@ -102,14 +86,9 @@ public class UserController {
 
     @PutMapping("/profile/image/{id}")
     public ResponseEntity<Object> updateProfileImage(
-            @PathVariable Integer id, @RequestParam("image") MultipartFile file) {
-        Optional<User> userOptional = repository.findById(id);
+            @PathVariable Integer id, @RequestParam("image") MultipartFile file) throws HandleException {
+        User user= repository.findById(id).orElseThrow(() -> new HandleException("User not found"));
 
-        if (!userOptional.isPresent()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found!");
-        }
-
-        User user = userOptional.get();
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
         String randomID = UUID.randomUUID().toString();
         fileName = randomID.concat(fileName.substring(fileName.lastIndexOf(".")));
@@ -132,14 +111,9 @@ public class UserController {
 
     @PutMapping("/profile/background/{id}")
     public ResponseEntity<Object> updateProfileBackground(
-            @PathVariable Integer id, @RequestParam("image") MultipartFile file) {
-        Optional<User> userOptional = repository.findById(id);
+            @PathVariable Integer id, @RequestParam("image") MultipartFile file) throws HandleException {
+        User user = repository.findById(id).orElseThrow(() -> new HandleException("User not found"));
 
-        if (!userOptional.isPresent()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found!");
-        }
-
-        User user = userOptional.get();
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
         String randomID = UUID.randomUUID().toString();
         fileName = randomID.concat(fileName.substring(fileName.lastIndexOf(".")));
@@ -160,13 +134,9 @@ public class UserController {
     }
 
     @DeleteMapping("/profile/{id}")
-    public ResponseEntity<Object> deleteProfile(@PathVariable(value = "id") Integer id) {
-        Optional<User> user = repository.findById(id);
-        if (!user.isPresent()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found!");
-        }
-
-        repository.deleteById(id);
+    public ResponseEntity<Object> deleteProfile(@PathVariable(value = "id") Integer id) throws HandleException {
+        User user = repository.findById(id).orElseThrow(() -> new HandleException("User not found!"));
+        repository.deleteById(user.getId());
         return ResponseEntity.status(HttpStatus.OK).body("User deleted!");
     }
 }

@@ -1,5 +1,6 @@
 package com.dsw.trabalho.minimalList.controller.api;
 
+import com.dsw.trabalho.minimalList.helper.HandleException;
 import com.dsw.trabalho.minimalList.model.Content;
 import com.dsw.trabalho.minimalList.repository.ContentRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,9 +25,8 @@ public class ContentController {
     }
 
     @GetMapping("/find/{id}")
-    public ResponseEntity<Object> getOne(@PathVariable Integer id){
-        Content optionalContent = contentRepository.findById(id).orElse(null);
-        if(optionalContent == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Content not found!");
+    public ResponseEntity<Object> getOne(@PathVariable Integer id) throws HandleException {
+        Content optionalContent = contentRepository.findById(id).orElseThrow(() -> new HandleException("Content not found!"));
 
         return ResponseEntity.status(HttpStatus.OK).body(optionalContent);
     }
@@ -34,11 +34,6 @@ public class ContentController {
     @GetMapping("/{search}")
     public ResponseEntity<Object> searchByName(@PathVariable String search){
         List<Content> content = contentRepository.findAllByNameOrTitle(search);
-        System.out.println("breaking");
-        if (content == null){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Content not found!");
-        }
-
         return ResponseEntity.status(HttpStatus.OK).body(content);
     }
 }

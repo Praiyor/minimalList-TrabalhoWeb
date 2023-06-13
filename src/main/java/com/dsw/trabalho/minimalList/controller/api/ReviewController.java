@@ -34,21 +34,16 @@ public class ReviewController {
     private final ContentRepository contentRepository;
 
     @GetMapping("/user/{userId}")
-    public ResponseEntity<Object> findAllReviewsByUser(@PathVariable Integer userId) {
-        Optional<User> userOptional = userRepository.findById(userId);
-        if (userOptional.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found!");
-        }
-
-        User user = userOptional.get();
+    public ResponseEntity<Object> findAllReviewsByUser(@PathVariable Integer userId) throws HandleException {
+        User user = userRepository.findById(userId).orElseThrow(() -> new HandleException("User not found!"));
         List<Review> reviews = repository.findAllReviewsByUser(user);
 
         return ResponseEntity.status(HttpStatus.OK).body(reviews);
     }
 
     @GetMapping("/content/{contentId}")
-    public ResponseEntity<Object> findAllReviewsByContent(@PathVariable Integer contentId) {
-        Content content = contentRepository.findById(contentId).orElse(null);
+    public ResponseEntity<Object> findAllReviewsByContent(@PathVariable Integer contentId) throws HandleException {
+        Content content = contentRepository.findById(contentId).orElseThrow(() -> new HandleException("Content not found!"));
         List<Review> review = repository.findAllByContent(content);
 
         return ResponseEntity.status(HttpStatus.OK).body(review);
@@ -79,24 +74,11 @@ public class ReviewController {
     }
 
     @PostMapping
-    public ResponseEntity<Object> addReview(@RequestBody @Valid ReviewRequestDTO reviewDto) {
-        Optional<User> userExist = userRepository.findById(reviewDto.getIdUser());
-        Optional<Content> contentExist = contentRepository.findById(reviewDto.getIdContent());
-        if (!userExist.isPresent())
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized!");
+    public ResponseEntity<Object> addReview(@RequestBody @Valid ReviewRequestDTO reviewDto) throws HandleException {
+        User user = userRepository.findById(reviewDto.getIdUser()).orElseThrow(() -> new HandleException("User not found!"));
+        Content content = contentRepository.findById(reviewDto.getIdContent()).orElseThrow(() -> new HandleException("Content not found!"));
+        Review review = repository.findByUserAndContent(user, content).orElseThrow(() -> new HandleException("Review not found!"));
 
-        if (!contentExist.isPresent())
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Content not found!");
-
-        User user = userExist.get();
-        Content content = contentExist.get();
-
-        Optional<Review> reviewExists = repository.findByUserAndContent(user, content);
-        if (reviewExists.isPresent()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Review já existe");
-        }
-
-        Review review = new Review();
         review.setContent(content);
         review.setUser(user);
         review.setRate(reviewDto.getRate());
