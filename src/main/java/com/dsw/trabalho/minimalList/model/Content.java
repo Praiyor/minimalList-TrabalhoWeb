@@ -65,8 +65,9 @@ public class Content {
     @OrderBy("id DESC")
     private List<Review> reviews; 
 
-    //@OneToMany
-    //private List<Category> idCategory;
+    @OneToMany(mappedBy = "content", cascade = CascadeType.ALL)
+    @OrderBy("id DESC")
+    private List<Category> category;
 
     private boolean produce;
 
@@ -92,5 +93,9 @@ public class Content {
     @JsonManagedReference
     public List<Review> getReviews() {
         return reviews;
+    }
+
+    public List<Category> getCategory(){
+        return category;
     }
 }

@@ -13,7 +13,7 @@ public class ContentDTO {
     private Integer id;
     private String name;
     private String duration;
-    private String season;
+    private int season;
     private String title;
     private String description;
     private String produce;

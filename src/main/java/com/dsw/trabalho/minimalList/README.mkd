@@ -97,18 +97,18 @@
     *  [x] ListAll (fazer uma media de Rate) - Falta testar (precisar popular o banco)
     *  [x] GetOne (fazer uma media de Rate,  pegar todas as Reviews) - Falta testar (precisar popular o banco)
     *  [x] Search (name) -> falta testar
-    *  [] FindAllSeason 
-    *  [] FindAllBySeason
-    *  [] FindAllByCategory
+    *  [x] FindAllSeason
+    *  [x] FindAllBySeason
+    *  [x] FindAllByCategory
  
 * Category
-    *  [] ListAll
-    *  [] ListByName
+    *  [x] ListAll
+    *  [x] ListByName
 
 * Achievement
-    *  [] add
-    *  [] listAll
-    *  [] listByUser
+    *  [x] add
+    *  [x] listAll
+    *  [x] listByUser
 --
 
 

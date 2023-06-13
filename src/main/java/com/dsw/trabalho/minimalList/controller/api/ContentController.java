@@ -36,4 +36,36 @@ public class ContentController {
         List<Content> content = contentRepository.findAllByNameOrTitle(search);
         return ResponseEntity.status(HttpStatus.OK).body(content);
     }
+
+    @GetMapping("/getSeason")
+    public ResponseEntity<Object> findAllSeason(){
+        List<Integer> seasons = contentRepository.findAllSeason();
+
+        if (seasons == null){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Seasons not found!");
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(seasons);
+    }
+
+    @GetMapping("/findBySeason/{season}")
+    public ResponseEntity<Object> findAllBySeason(@PathVariable int season){
+        List<Content> content = contentRepository.findAllBySeason(season);
+        if (content == null){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Content not found!");
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(content);
+    }
+
+    @GetMapping("/{category}")
+    public ResponseEntity<Object> findAllByCategory(@PathVariable int category){
+        List<Content> contents = contentRepository.findAllByCategory(category);
+
+        if (contents == null){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Content not Found!");
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(contents);
+    }
 }
