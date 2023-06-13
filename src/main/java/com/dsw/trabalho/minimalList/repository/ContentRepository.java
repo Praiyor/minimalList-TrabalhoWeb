@@ -1,5 +1,6 @@
 package com.dsw.trabalho.minimalList.repository;
 
+import com.dsw.trabalho.minimalList.model.Category;
 import com.dsw.trabalho.minimalList.model.Content;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -18,5 +19,5 @@ public interface ContentRepository extends JpaRepository<Content, Integer> {
     @Query(value = "SELECT c.season FROM contents as c", nativeQuery = true)
     List<Integer> findAllSeason();
 
-    List<Content> findAllByCategory(int category);
+    List<Content> findAllByCategory(Category category);
 }

@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -18,8 +20,8 @@ public class Achievement {
     private Integer id;
 
     @ManyToOne
-    @JoinColumn(name = "id_user")
-    private User idUser;
+    @JoinColumn(name = "user_id")
+    private User user;
 
     private String icon;
     private String name;
@@ -41,5 +43,10 @@ public class Achievement {
     @PreUpdate
     protected void onUpdate() {
         updatedAt = LocalDateTime.now();
+    }
+
+    @JsonBackReference
+    public User getUser() {
+        return user;
     }
 }

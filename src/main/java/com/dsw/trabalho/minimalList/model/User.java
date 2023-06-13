@@ -68,6 +68,9 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Review> reviews;
 
+    @OneToMany(mappedBy = "user")
+    private List<Achievement> achievements;
+
     private String token;
 
     private String imagePath;

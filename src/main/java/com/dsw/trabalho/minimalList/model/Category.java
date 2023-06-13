@@ -1,13 +1,16 @@
 package com.dsw.trabalho.minimalList.model;
 
-
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
 import java.time.LocalDateTime;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Data
 @Builder
@@ -30,6 +33,10 @@ public class Category {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
+    @OrderBy("id DESC")
+    private List<Content> content;
+
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();
@@ -41,5 +48,8 @@ public class Category {
         updatedAt = LocalDateTime.now();
     }
 
-
+    @JsonManagedReference
+    public List<Content> getContent() {
+        return content;
+    }
 }

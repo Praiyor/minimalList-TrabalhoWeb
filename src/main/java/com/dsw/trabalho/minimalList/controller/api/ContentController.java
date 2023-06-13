@@ -1,7 +1,9 @@
 package com.dsw.trabalho.minimalList.controller.api;
 
 import com.dsw.trabalho.minimalList.helper.HandleException;
+import com.dsw.trabalho.minimalList.model.Category;
 import com.dsw.trabalho.minimalList.model.Content;
+import com.dsw.trabalho.minimalList.repository.CategoryRepository;
 import com.dsw.trabalho.minimalList.repository.ContentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -15,11 +17,11 @@ import java.util.List;
 @RequestMapping("/api/content")
 @RequiredArgsConstructor
 public class ContentController {
-
     private final ContentRepository contentRepository;
+    private final CategoryRepository categoryRepository;
 
     @GetMapping
-    public ResponseEntity<List<Content>> listAll(){
+    public ResponseEntity<List<Content>> listAll() {
         return ResponseEntity.status(HttpStatus.OK).body(contentRepository.findAll());
     }
 
@@ -31,40 +33,24 @@ public class ContentController {
     }
 
     @GetMapping("/{search}")
-    public ResponseEntity<Object> searchByName(@PathVariable String search){
+    public ResponseEntity<Object> searchByName(@PathVariable String search) {
         List<Content> content = contentRepository.findAllByNameOrTitle(search);
         return ResponseEntity.status(HttpStatus.OK).body(content);
     }
 
     @GetMapping("/getSeason")
-    public ResponseEntity<Object> findAllSeason(){
-        List<Integer> seasons = contentRepository.findAllSeason();
-
-        if (seasons == null){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Seasons not found!");
-        }
-
-        return ResponseEntity.status(HttpStatus.OK).body(seasons);
+    public ResponseEntity<Object> findAllSeason() {
+        return ResponseEntity.status(HttpStatus.OK).body(contentRepository.findAllSeason());
     }
 
     @GetMapping("/findBySeason/{season}")
-    public ResponseEntity<Object> findAllBySeason(@PathVariable int season){
-        List<Content> content = contentRepository.findAllBySeason(season);
-        if (content == null){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Content not found!");
-        }
-
-        return ResponseEntity.status(HttpStatus.OK).body(content);
+    public ResponseEntity<Object> findAllBySeason(@PathVariable int season) {
+        return ResponseEntity.status(HttpStatus.OK).body(contentRepository.findAllBySeason(season));
     }
 
     @GetMapping("/{category}")
-    public ResponseEntity<Object> findAllByCategory(@PathVariable int category){
-        List<Content> contents = contentRepository.findAllByCategory(category);
-
-        if (contents == null){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Content not Found!");
-        }
-
-        return ResponseEntity.status(HttpStatus.OK).body(contents);
+    public ResponseEntity<Object> findAllByCategory(@PathVariable Integer categoryId) throws HandleException {
+        Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new HandleException("Category not found!"));
+        return ResponseEntity.status(HttpStatus.OK).body(contentRepository.findAllByCategory(category));
     }
 }
