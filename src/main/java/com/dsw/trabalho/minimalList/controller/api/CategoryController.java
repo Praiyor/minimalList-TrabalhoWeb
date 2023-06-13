@@ -1,6 +1,7 @@
 package com.dsw.trabalho.minimalList.controller.api;
 
 
+import com.dsw.trabalho.minimalList.helper.HandleException;
 import com.dsw.trabalho.minimalList.model.Category;
 import com.dsw.trabalho.minimalList.repository.CategoryRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,13 +25,7 @@ public class CategoryController {
     }
 
     @GetMapping("/find/{name}")
-    public ResponseEntity<Object> listByName(@PathVariable String name){
-        List<Category> categoryList = categoryRepository.findByName(name);
-
-        if(categoryList == null){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Category not found!");
-        }
-
-        return ResponseEntity.status(HttpStatus.OK).body(categoryList);
+    public ResponseEntity<Object> listByName(@PathVariable String name) throws HandleException {
+        return ResponseEntity.status(HttpStatus.OK).body(categoryRepository.findByName(name));
     }
 }

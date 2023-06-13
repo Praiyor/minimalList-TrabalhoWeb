@@ -1,6 +1,7 @@
 package com.dsw.trabalho.minimalList.controller.api;
 
 import com.dsw.trabalho.minimalList.dto.AchievementDTO;
+import com.dsw.trabalho.minimalList.helper.HandleException;
 import com.dsw.trabalho.minimalList.model.Achievement;
 import com.dsw.trabalho.minimalList.model.User;
 import com.dsw.trabalho.minimalList.repository.AchievementRepository;
@@ -35,11 +36,8 @@ public class AchievementController {
     }
 
     @GetMapping("/{idUser}")
-    public ResponseEntity<Object> listByUser(@PathVariable Integer idUser){
-        User user = userRepository.findById(idUser).orElse(null);
-        if (user == null){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found!");
-        }
+    public ResponseEntity<Object> listByUser(@PathVariable Integer idUser) throws HandleException {
+        User user = userRepository.findById(idUser).orElseThrow(() -> new HandleException("User not found"));
         return ResponseEntity.status(HttpStatus.OK).body(achievementRepository.findByUser(user));
     }
 }

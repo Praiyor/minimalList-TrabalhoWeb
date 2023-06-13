@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -20,6 +21,7 @@ import com.dsw.trabalho.minimalList.repository.ContentRepository;
 import com.dsw.trabalho.minimalList.repository.UserLibraryRepository;
 import com.dsw.trabalho.minimalList.repository.UserRepository;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -46,7 +48,7 @@ public class UserLibraryController {
     }
 
     @PostMapping
-    public ResponseEntity<Object> add(UserLibraryDTO libraryDTO) throws HandleException {
+    public ResponseEntity<Object> add(@RequestBody @Valid UserLibraryDTO libraryDTO) throws HandleException {
         User user = userRepository.findById(libraryDTO.getIdUser()).orElseThrow(() -> new HandleException("User not found"));
         Content content = contentRepository.findById(libraryDTO.getIdContent()).orElseThrow(() -> new HandleException("Content not found"));
 
@@ -61,7 +63,7 @@ public class UserLibraryController {
 
     // update
     @PutMapping("/{id}")
-    public ResponseEntity<Object> update(@PathVariable Integer id, UserLibraryDTO libraryDTO) throws HandleException {
+    public ResponseEntity<Object> update(@PathVariable Integer id, @RequestBody @Valid UserLibraryDTO libraryDTO) throws HandleException {
         UserLibrary userLibrary = repository.findById(id).orElseThrow(() -> new HandleException("Library not found"));
         if  (userLibrary.getUser().getId() != libraryDTO.getIdUser() && userLibrary.getContent().getId() != libraryDTO.getIdContent()) {
             throw new HandleException("User or Content not found!");

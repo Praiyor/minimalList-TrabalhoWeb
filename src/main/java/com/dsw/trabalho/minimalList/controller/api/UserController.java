@@ -30,6 +30,7 @@ import com.dsw.trabalho.minimalList.service.FileService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -49,7 +50,7 @@ public class UserController {
 
     @PostMapping("/register")
     public ResponseEntity<Object> register(
-            @RequestBody UserRegisterDTO registerDTO,
+            @RequestBody @Valid UserRegisterDTO registerDTO,
             HttpServletRequest request,
             HttpServletResponse response) throws HandleException {
         Optional<User> user = repository.findByEmail(registerDTO.getEmail());
@@ -64,7 +65,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Object> signIn(@RequestBody UserSignInDTO userDto) throws HandleException {
+    public ResponseEntity<Object> signIn(@RequestBody @Valid UserSignInDTO userDto) throws HandleException {
         User user = repository.findByEmail(userDto.getEmail()).orElseThrow(() -> new HandleException("Email or password incorrect"));
         if (!user.getPassword().equals(userDto.getPassword())) 
             throw new HandleException("Email or password incorrect");
@@ -74,7 +75,7 @@ public class UserController {
 
     @PutMapping("/profile/{id}")
     public ResponseEntity<Object> updateProfile(
-            @PathVariable(value = "id") Integer id, @RequestBody ProfileRequestDTO profileDto) throws HandleException {
+            @PathVariable(value = "id") Integer id, @RequestBody @Valid ProfileRequestDTO profileDto) throws HandleException {
         User user = repository.findById(id).orElseThrow(() -> new HandleException("User not found"));
 
         BeanUtils.copyProperties(profileDto, user);
