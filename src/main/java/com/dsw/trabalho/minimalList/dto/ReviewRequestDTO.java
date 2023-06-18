@@ -10,6 +10,7 @@ import lombok.Data;
 public class ReviewRequestDTO {
     private Integer idUser;
     private Integer idContent;
+
     @NotNull(message = "Rate is required")
     private Float rate;
     @NotEmpty(message = "Text is required")

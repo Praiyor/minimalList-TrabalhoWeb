@@ -54,7 +54,7 @@ public class UserController {
             HttpServletRequest request,
             HttpServletResponse response) throws HandleException {
         Optional<User> user = repository.findByEmail(registerDTO.getEmail());
-        if (user.isPresent()) throw new HandleException("User already exists!");
+        if (user.isPresent()) throw new HandleException("Usuário já existe!");
 
         User newUser = new User();
         newUser.setEmail(registerDTO.getEmail());
@@ -66,7 +66,7 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<Object> signIn(@RequestBody @Valid UserSignInDTO userDto) throws HandleException {
-        User user = repository.findByEmail(userDto.getEmail()).orElseThrow(() -> new HandleException("Email or password incorrect"));
+        User user = repository.findByEmail(userDto.getEmail()).orElseThrow(() -> new HandleException("Email ou senha incorreto(s)!"));
         if (!user.getPassword().equals(userDto.getPassword())) 
             throw new HandleException("Email or password incorrect");
 
