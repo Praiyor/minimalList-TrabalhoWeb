@@ -34,7 +34,7 @@ public class ReviewController {
 
     @GetMapping("/user/{userId}")
     public ResponseEntity<Object> findAllReviewsByUser(@PathVariable Integer userId) throws HandleException {
-        User user = userRepository.findById(userId).orElseThrow(() -> new HandleException("User not found!"));
+        User user = userRepository.findById(userId).orElseThrow(() -> new HandleException("Usuário não foi encontrado!"));
         List<Review> reviews = repository.findAllReviewsByUser(user);
 
         return ResponseEntity.status(HttpStatus.OK).body(reviews);
@@ -42,7 +42,7 @@ public class ReviewController {
 
     @GetMapping("/content/{contentId}")
     public ResponseEntity<Object> findAllReviewsByContent(@PathVariable Integer contentId) throws HandleException {
-        Content content = contentRepository.findById(contentId).orElseThrow(() -> new HandleException("Content not found!"));
+        Content content = contentRepository.findById(contentId).orElseThrow(() -> new HandleException("Conteudo não foi encontrado!"));
         List<Review> review = repository.findAllByContent(content);
 
         return ResponseEntity.status(HttpStatus.OK).body(review);
@@ -52,7 +52,7 @@ public class ReviewController {
     public ResponseEntity<Object> update(
             @PathVariable(value = "id") Integer id, @RequestBody @Valid ReviewRequestDTO reviewDto)
             throws HandleException {
-        Review review = repository.findById(id).orElseThrow(() -> new HandleException("Review not found!"));
+        Review review = repository.findById(id).orElseThrow(() -> new HandleException("Review não foi encontrada!"));
         Review reviewVerify = repository.findByUserAndContent(reviewDto.getIdUser(), reviewDto.getIdContent());
 
         if (review != reviewVerify)
@@ -69,14 +69,14 @@ public class ReviewController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> delete(@PathVariable(value = "id") Integer id) {
         repository.deleteById(id);
-        return ResponseEntity.status(HttpStatus.OK).body("Review deleted!");
+        return ResponseEntity.status(HttpStatus.OK).body("Review deletada!");
     }
 
     @PostMapping
     public ResponseEntity<Object> addReview(@RequestBody @Valid ReviewRequestDTO reviewDto) throws HandleException {
-        User user = userRepository.findById(reviewDto.getIdUser()).orElseThrow(() -> new HandleException("User not found!"));
-        Content content = contentRepository.findById(reviewDto.getIdContent()).orElseThrow(() -> new HandleException("Content not found!"));
-        Review review = repository.findByUserAndContent(user, content).orElseThrow(() -> new HandleException("Review not found!"));
+        User user = userRepository.findById(reviewDto.getIdUser()).orElseThrow(() -> new HandleException("Usuário não foi encontrado!"));
+        Content content = contentRepository.findById(reviewDto.getIdContent()).orElseThrow(() -> new HandleException("Conteudo não foi encontrado!"));
+        Review review = repository.findByUserAndContent(user, content).orElseThrow(() -> new HandleException("Review não foi encontrada!"));
 
         review.setContent(content);
         review.setUser(user);

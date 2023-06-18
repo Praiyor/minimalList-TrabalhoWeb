@@ -42,7 +42,7 @@ public class UserController {
 
     @GetMapping("/profile/{id}")
     public ResponseEntity<Object> getProfile(@PathVariable Integer id) throws HandleException {
-        User user = repository.findById(id).orElseThrow(() -> new HandleException("User not found!"));
+        User user = repository.findById(id).orElseThrow(() -> new HandleException("Usuário não foi encontrado!"));
 
         return ResponseEntity.status(HttpStatus.OK).body(user);
     }
@@ -67,7 +67,7 @@ public class UserController {
     public ResponseEntity<Object> signIn(@RequestBody @Valid UserSignInDTO userDto) throws HandleException {
         User user = repository.findByEmail(userDto.getEmail()).orElseThrow(() -> new HandleException("Email ou senha incorreto(s)!"));
         if (!user.getPassword().equals(userDto.getPassword())) 
-            throw new HandleException("Email or password incorrect");
+            throw new HandleException("Email ou senha incorreto(s)");
 
         return ResponseEntity.ok(user);
     }
@@ -75,7 +75,7 @@ public class UserController {
     @PutMapping("/profile/{id}")
     public ResponseEntity<Object> updateProfile(
             @PathVariable(value = "id") Integer id, @RequestBody @Valid ProfileRequestDTO profileDto) throws HandleException {
-        User user = repository.findById(id).orElseThrow(() -> new HandleException("User not found"));
+        User user = repository.findById(id).orElseThrow(() -> new HandleException("Usuário não foi encontrado"));
 
         BeanUtils.copyProperties(profileDto, user);
         user.setId(id);
@@ -87,7 +87,7 @@ public class UserController {
     @PutMapping("/profile/image/{id}")
     public ResponseEntity<Object> updateProfileImage(
             @PathVariable Integer id, @RequestParam("image") MultipartFile file) throws HandleException {
-        User user= repository.findById(id).orElseThrow(() -> new HandleException("User not found"));
+        User user= repository.findById(id).orElseThrow(() -> new HandleException("Usuário não foi encontrado"));
 
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
         String randomID = UUID.randomUUID().toString();
@@ -103,7 +103,7 @@ public class UserController {
             user.setImagePath(uploadDir);
             repository.save(user);
         } catch (IOException e) {
-            throw new RuntimeException("Could not save image: " + fileName);
+            throw new RuntimeException("Não foi possivel salvar a imagem: " + fileName);
         }
 
         return ResponseEntity.status(HttpStatus.OK).body(user);
@@ -112,7 +112,7 @@ public class UserController {
     @PutMapping("/profile/background/{id}")
     public ResponseEntity<Object> updateProfileBackground(
             @PathVariable Integer id, @RequestParam("image") MultipartFile file) throws HandleException {
-        User user = repository.findById(id).orElseThrow(() -> new HandleException("User not found"));
+        User user = repository.findById(id).orElseThrow(() -> new HandleException("Usuário não foi encontrado"));
 
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
         String randomID = UUID.randomUUID().toString();
@@ -127,7 +127,7 @@ public class UserController {
             user.setImagePath(uploadDir);
             repository.save(user);
         } catch (IOException e) {
-            throw new RuntimeException("Could not save image: " + fileName);
+            throw new RuntimeException("Não foi possivel salvar a imagem: " + fileName);
         }
 
         return ResponseEntity.status(HttpStatus.OK).body(user);
@@ -135,8 +135,8 @@ public class UserController {
 
     @DeleteMapping("/profile/{id}")
     public ResponseEntity<Object> deleteProfile(@PathVariable(value = "id") Integer id) throws HandleException {
-        User user = repository.findById(id).orElseThrow(() -> new HandleException("User not found!"));
+        User user = repository.findById(id).orElseThrow(() -> new HandleException("Usuário não foi encontrado!"));
         repository.deleteById(user.getId());
-        return ResponseEntity.status(HttpStatus.OK).body("User deleted!");
+        return ResponseEntity.status(HttpStatus.OK).body("Usuário deletado!");
     }
 }

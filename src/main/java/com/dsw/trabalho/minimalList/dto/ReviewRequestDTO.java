@@ -11,12 +11,12 @@ public class ReviewRequestDTO {
     private Integer idUser;
     private Integer idContent;
 
-    @NotNull(message = "Rate is required")
+    @NotNull(message = "Avaliação é obrigatório")
     private Float rate;
-    @NotEmpty(message = "Text is required")
+    @NotEmpty(message = "Texto é obrigatório")
     @Size(min = 4)
     private String text;
-    @NotEmpty(message = "Title is required")
+    @NotEmpty(message = "Titulo é obrigatório")
     @Size(min = 4)
     private String title;
     private boolean spollier = false;

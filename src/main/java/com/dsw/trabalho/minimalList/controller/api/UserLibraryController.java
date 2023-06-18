@@ -34,22 +34,22 @@ public class UserLibraryController {
 
     @GetMapping("/{idUser}")
     public ResponseEntity<Object> findAllContentByUser(@PathVariable Integer idUser) throws HandleException {
-        User user = userRepository.findById(idUser).orElseThrow(() -> new HandleException("User not found"));
+        User user = userRepository.findById(idUser).orElseThrow(() -> new HandleException("Usuário não foi encontrado"));
          
         return ResponseEntity.status(HttpStatus.OK).body(repository.findAllByUser(user));
     }
 
     @GetMapping("/{idUser}/content/{idContent}")
     public ResponseEntity<Object> getOneByContent(@PathVariable Integer idUser, @PathVariable Integer idContent)  throws HandleException {
-        User user = userRepository.findById(idUser).orElseThrow(() -> new HandleException("User not found"));
+        User user = userRepository.findById(idUser).orElseThrow(() -> new HandleException("Usuário não foi encontrado"));
         
         return ResponseEntity.status(HttpStatus.OK).body(repository.findByUserAndContent(user, contentRepository.findById(idContent).orElse(null)));
     }
 
     @PostMapping
     public ResponseEntity<Object> add(@RequestBody @Valid UserLibraryDTO libraryDTO) throws HandleException {
-        User user = userRepository.findById(libraryDTO.getIdUser()).orElseThrow(() -> new HandleException("User not found"));
-        Content content = contentRepository.findById(libraryDTO.getIdContent()).orElseThrow(() -> new HandleException("Content not found"));
+        User user = userRepository.findById(libraryDTO.getIdUser()).orElseThrow(() -> new HandleException("Usuário não foi encontrado"));
+        Content content = contentRepository.findById(libraryDTO.getIdContent()).orElseThrow(() -> new HandleException("Conteudo não foi encontrado"));
 
         UserLibrary library = new UserLibrary();
         library.setUser(user);
@@ -63,9 +63,9 @@ public class UserLibraryController {
     // update
     @PutMapping("/{id}")
     public ResponseEntity<Object> update(@PathVariable Integer id, @RequestBody @Valid UserLibraryDTO libraryDTO) throws HandleException {
-        UserLibrary userLibrary = repository.findById(id).orElseThrow(() -> new HandleException("Library not found"));
+        UserLibrary userLibrary = repository.findById(id).orElseThrow(() -> new HandleException("Library não foi encontrada"));
         if  (userLibrary.getUser().getId() != libraryDTO.getIdUser() && userLibrary.getContent().getId() != libraryDTO.getIdContent()) {
-            throw new HandleException("User or Content not found!");
+            throw new HandleException("Usuário ou Conteudo não foi Encontrado!");
         }
 
         userLibrary.setStatusCotent(libraryDTO.getStatusContent());
@@ -76,7 +76,7 @@ public class UserLibraryController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> delete(@PathVariable Integer id) throws HandleException {
-        UserLibrary userLibrary = repository.findById(id).orElseThrow(() -> new HandleException("Library not found"));
+        UserLibrary userLibrary = repository.findById(id).orElseThrow(() -> new HandleException("Library não foi encontrada"));
         repository.delete(userLibrary);
         return ResponseEntity.status(HttpStatus.OK).body(userLibrary);
     }

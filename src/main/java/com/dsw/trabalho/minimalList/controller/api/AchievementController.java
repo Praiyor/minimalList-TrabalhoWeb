@@ -36,7 +36,7 @@ public class AchievementController {
 
     @GetMapping("/{idUser}")
     public ResponseEntity<Object> listByUser(@PathVariable Integer idUser) throws HandleException {
-        User user = userRepository.findById(idUser).orElseThrow(() -> new HandleException("User not found"));
+        User user = userRepository.findById(idUser).orElseThrow(() -> new HandleException("Usuário não foi encontrado"));
         return ResponseEntity.status(HttpStatus.OK).body(achievementRepository.findByUser(user));
     }
 }

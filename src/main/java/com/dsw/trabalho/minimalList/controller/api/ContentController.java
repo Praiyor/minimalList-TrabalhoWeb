@@ -26,7 +26,7 @@ public class ContentController {
 
     @GetMapping("/find/{id}")
     public ResponseEntity<Object> getOne(@PathVariable Integer id) throws HandleException {
-        Content optionalContent = contentRepository.findById(id).orElseThrow(() -> new HandleException("Content not found!"));
+        Content optionalContent = contentRepository.findById(id).orElseThrow(() -> new HandleException("Conteudo não foi encontrado!"));
 
         return ResponseEntity.status(HttpStatus.OK).body(optionalContent);
     }
@@ -49,7 +49,7 @@ public class ContentController {
 
     @GetMapping("/{category}")
     public ResponseEntity<Object> findAllByCategory(@PathVariable Integer categoryId) throws HandleException {
-        Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new HandleException("Category not found!"));
+        Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new HandleException("Categoria não foi encontrada!"));
         return ResponseEntity.status(HttpStatus.OK).body(contentRepository.findAllByCategory(category));
     }
 }
