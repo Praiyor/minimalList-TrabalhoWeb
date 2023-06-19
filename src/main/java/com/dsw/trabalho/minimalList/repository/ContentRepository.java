@@ -16,7 +16,7 @@ public interface ContentRepository extends JpaRepository<Content, Integer> {
 
     List<Content> findAllBySeason(int season);
 
-    @Query(value = "SELECT c.season FROM contents as c", nativeQuery = true)
+    @Query(value = "SELECT DISTINCT c.season FROM contents as c ORDER BY c.season", nativeQuery = true)
     List<Integer> findAllSeason();
 
     List<Content> findAllByCategory(Category category);
