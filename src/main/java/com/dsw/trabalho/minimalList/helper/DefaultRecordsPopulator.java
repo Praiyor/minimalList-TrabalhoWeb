@@ -8,7 +8,9 @@ import java.util.List;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+import com.dsw.trabalho.minimalList.model.Category;
 import com.dsw.trabalho.minimalList.model.Content;
+import com.dsw.trabalho.minimalList.repository.CategoryRepository;
 import com.dsw.trabalho.minimalList.repository.ContentRepository;
 
 import lombok.AllArgsConstructor;
@@ -18,6 +20,7 @@ import lombok.AllArgsConstructor;
 public class DefaultRecordsPopulator implements CommandLineRunner {
 
     private ContentRepository contentRepository;
+    private CategoryRepository categoryRepository;
 
     @Override
     public void run(String... args) {
@@ -123,6 +126,7 @@ public class DefaultRecordsPopulator implements CommandLineRunner {
             };
 
             List<Content> contents = new ArrayList<Content>(10);
+            Category category = null;
 
             for (int i = 0; i < namesContents.length; i++) {
                 Content content = new Content();
@@ -136,6 +140,14 @@ public class DefaultRecordsPopulator implements CommandLineRunner {
                 content.setCreatedAt(LocalDateTime.now());
                 content.setUpdatedAt(LocalDateTime.now());
                 contents.add(content);
+
+                category = new Category();
+                category.setName(genresContents[i]);
+                category.setCreatedAt(LocalDateTime.now());
+                category.setUpdatedAt(LocalDateTime.now());
+                categoryRepository.save(category);
+                content.setCategory(category);
+
             }
 
             contentRepository.saveAllAndFlush(contents);
