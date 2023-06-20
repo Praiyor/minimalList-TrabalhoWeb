@@ -3,6 +3,7 @@ package com.dsw.trabalho.minimalList.helper;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import org.springframework.boot.CommandLineRunner;
@@ -29,16 +30,16 @@ public class DefaultRecordsPopulator implements CommandLineRunner {
         if (contentRepository.findAll().isEmpty()) {
             // apiService.fetchGetDataApi("https://api.jikan.moe/v4/top/anime");
             String[] namesContents = {
-                    "Breaking Bad",
-                    "Game of Thrones",
-                    "Friends",
-                    "The Office",
-                    "Stranger Things",
-                    "The Crown",
-                    "The Big Bang Theory",
-                    "The Simpsons",
-                    "The Walking Dead",
-                    "Westworld",
+                "Breaking Bad", // DRAMA
+                "Game of Thrones", // Fantasy
+                "Friends", // COmey
+                "The Office",// COmey
+                "Stranger Things", // Fantasy
+                "The Crown", // DRama
+                "The Big Bang Theory", // COmey
+                "The Simpsons", // Animation
+                "The Walking Dead", // Horror
+                "Westworld", // Sci-fi
             };
 
             String[] descriptionsContents = {
@@ -85,14 +86,16 @@ public class DefaultRecordsPopulator implements CommandLineRunner {
                     "Drama",
                     "Fantasy",
                     "Comedy",
-                    "Comedy",
-                    "Drama/Fantasy",
-                    "Drama",
-                    "Comedy",
-                    "Animation/Comedy",
-                    "Horror/Drama",
-                    "Sci-Fi/Western"
+                    "Animation",
+                    "Horror",
+                    "Sci-Fi"
             };
+
+            for (String genre : genresContents) {
+                Category category = new Category();
+                category.setName(genre);
+                categoryRepository.save(category);
+            }
 
             LocalDate[] productionDateContent = {
                     LocalDate.of(2008, 1, 20),
@@ -113,7 +116,7 @@ public class DefaultRecordsPopulator implements CommandLineRunner {
             };
 
             String[] imagesContents = {
-                "http://localhost:8080/assets/images/content/breaking.jpeg",
+                "http://localhost:8080/assets/images/content/breaking.jpg",
                 "http://localhost:8080/assets/images/content/thrones.jpeg",
                 "http://localhost:8080/assets/images/content/friend.jpg",
                 "http://localhost:8080/assets/images/content/the-office.jpeg",
@@ -126,7 +129,6 @@ public class DefaultRecordsPopulator implements CommandLineRunner {
             };
 
             List<Content> contents = new ArrayList<Content>(10);
-            Category category = null;
 
             for (int i = 0; i < namesContents.length; i++) {
                 Content content = new Content();
@@ -141,15 +143,20 @@ public class DefaultRecordsPopulator implements CommandLineRunner {
                 content.setUpdatedAt(LocalDateTime.now());
                 contents.add(content);
 
-                category = new Category();
-                category.setName(genresContents[i]);
-                category.setCreatedAt(LocalDateTime.now());
-                category.setUpdatedAt(LocalDateTime.now());
-                categoryRepository.save(category);
-                content.setCategory(category);
-
+                if (i == 0 || i == 5) {
+                    content.setCategory(categoryRepository.findByName("Drama"));
+                } else if (i == 1 || i == 4 || i == 9) {
+                    content.setCategory(categoryRepository.findByName("Fantasy"));
+                } else if (i == 2 || i == 3 || i == 6) {
+                    content.setCategory(categoryRepository.findByName("Comedy"));
+                } else if (i == 8) {
+                    content.setCategory(categoryRepository.findByName("Horror"));
+                } else if (i == 9) {
+                    content.setCategory(categoryRepository.findByName("Sci-Fi"));
+                } else {
+                    content.setCategory(categoryRepository.findByName("Animation"));
+                }
             }
-
             contentRepository.saveAllAndFlush(contents);
         }
     }

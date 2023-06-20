@@ -31,9 +31,15 @@ public class ContentController {
         return ResponseEntity.status(HttpStatus.OK).body(optionalContent);
     }
 
-    @GetMapping("/{search}")
-    public ResponseEntity<Object> searchByName(@PathVariable String search) {
-        List<Content> content = contentRepository.findAllByNameOrTitle(search);
+    @GetMapping("/search")
+    public ResponseEntity<Object> searchByName(
+        @RequestParam(required = false) String title,
+        @RequestParam(required = false) String name,
+        @RequestParam(required = false) Integer season,
+        @RequestParam(required = false) Integer category
+    ) {
+        System.out.println(title + " " + name + " " + season + " " + category);
+        List<Content> content = contentRepository.searchContent(title, name, season, category);
         return ResponseEntity.status(HttpStatus.OK).body(content);
     }
 
@@ -42,12 +48,12 @@ public class ContentController {
         return ResponseEntity.status(HttpStatus.OK).body(contentRepository.findAllSeason());
     }
 
-    @GetMapping("/findBySeason/{season}")
+    @GetMapping("/season/{season}")
     public ResponseEntity<Object> findAllBySeason(@PathVariable int season) {
         return ResponseEntity.status(HttpStatus.OK).body(contentRepository.findAllBySeason(season));
     }
 
-    @GetMapping("/{category}")
+    @GetMapping("/category/{categoryId}")
     public ResponseEntity<Object> findAllByCategory(@PathVariable Integer categoryId) throws HandleException {
         Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new HandleException("Categoria não foi encontrada!"));
         return ResponseEntity.status(HttpStatus.OK).body(contentRepository.findAllByCategory(category));

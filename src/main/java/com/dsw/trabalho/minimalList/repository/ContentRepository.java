@@ -2,12 +2,11 @@ package com.dsw.trabalho.minimalList.repository;
 
 import com.dsw.trabalho.minimalList.model.Category;
 import com.dsw.trabalho.minimalList.model.Content;
+import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-
-import java.util.List;
-
 
 @Repository
 public interface ContentRepository extends JpaRepository<Content, Integer> {
@@ -20,4 +19,14 @@ public interface ContentRepository extends JpaRepository<Content, Integer> {
     List<Integer> findAllSeason();
 
     List<Content> findAllByCategory(Category category);
+
+    @Query("SELECT c FROM Content c WHERE (:title is null or c.title LIKE %:title%) "
+            + "AND (:name is null or c.name LIKE %:name%) "
+            + "AND (:season is null or c.season = :season) "
+            + "AND (:categoryId is null or c.category.id = :categoryId)")
+    List<Content> searchContent(
+            @Param("title") String title,
+            @Param("name") String name,
+            @Param("season") Integer season,
+            @Param("categoryId") Integer categoryId);
 }

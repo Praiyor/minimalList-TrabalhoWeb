@@ -7,6 +7,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+
+import org.hibernate.validator.constraints.UniqueElements;
+
 import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -24,7 +27,7 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
-    @Column(nullable = false)
+    @Column(unique=true)
     private String name;
 
     @Column(name = "created_at")

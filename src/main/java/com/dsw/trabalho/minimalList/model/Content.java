@@ -4,7 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
-
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.annotation.Nullable;
@@ -86,5 +86,10 @@ public class Content {
     @JsonManagedReference
     public List<Review> getReviews() {
         return reviews;
+    }
+
+    @JsonBackReference
+    public Category getCategory() {
+        return category;
     }
 }
