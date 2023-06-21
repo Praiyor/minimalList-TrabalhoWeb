@@ -68,7 +68,7 @@ public class Review {
     }
 
     @JsonBackReference
-    public Content getUser(){
-        return content;
+    public User getUser(){
+        return user;
     }
 }

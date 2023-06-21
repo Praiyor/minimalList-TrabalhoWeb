@@ -27,7 +27,6 @@ public class ContentController {
     @GetMapping("/find/{id}")
     public ResponseEntity<Object> getOne(@PathVariable Integer id) throws HandleException {
         Content optionalContent = contentRepository.findById(id).orElseThrow(() -> new HandleException("Conteudo não foi encontrado!"));
-
         return ResponseEntity.status(HttpStatus.OK).body(optionalContent);
     }
 

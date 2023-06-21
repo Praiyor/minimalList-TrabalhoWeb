@@ -3,12 +3,8 @@ package com.dsw.trabalho.minimalList.model;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedBy;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
@@ -45,7 +41,6 @@ public class User {
     @Nullable
     private String nickname;
 
-
     @Column(nullable = true)
     @Nullable
     private String image;
@@ -70,6 +65,9 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private List<Achievement> achievements;
+
+    @OneToMany(mappedBy = "user")
+    private List<UserLibrary> libraries;
 
     private String token;
 
@@ -100,4 +98,18 @@ public class User {
         this.updatedAt = LocalDateTime.now();
     }
 
+    @JsonManagedReference
+    public List<Review> getReviews() {
+        return reviews;
+    }
+
+    @JsonManagedReference
+    public List<Achievement> getAchievements() {
+        return achievements;
+    }
+
+    @JsonManagedReference
+    public List<UserLibrary> getLibraries() {
+        return libraries;
+    }
 }
