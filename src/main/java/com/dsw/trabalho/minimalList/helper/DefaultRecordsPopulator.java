@@ -1,26 +1,25 @@
 package com.dsw.trabalho.minimalList.helper;
 
+import com.dsw.trabalho.minimalList.model.Category;
+import com.dsw.trabalho.minimalList.model.Content;
+import com.dsw.trabalho.minimalList.model.ContentSeason;
+import com.dsw.trabalho.minimalList.repository.CategoryRepository;
+import com.dsw.trabalho.minimalList.repository.ContentRepository;
+import com.dsw.trabalho.minimalList.repository.ContentSeasonRepository;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-
+import lombok.AllArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
-
-import com.dsw.trabalho.minimalList.model.Category;
-import com.dsw.trabalho.minimalList.model.Content;
-import com.dsw.trabalho.minimalList.repository.CategoryRepository;
-import com.dsw.trabalho.minimalList.repository.ContentRepository;
-
-import lombok.AllArgsConstructor;
 
 @Component
 @AllArgsConstructor
 public class DefaultRecordsPopulator implements CommandLineRunner {
 
     private ContentRepository contentRepository;
+    private ContentSeasonRepository contentSeasonRepository;
     private CategoryRepository categoryRepository;
 
     @Override
@@ -30,16 +29,16 @@ public class DefaultRecordsPopulator implements CommandLineRunner {
         if (contentRepository.findAll().isEmpty()) {
             // apiService.fetchGetDataApi("https://api.jikan.moe/v4/top/anime");
             String[] namesContents = {
-                "Breaking Bad", // DRAMA
-                "Game of Thrones", // Fantasy
-                "Friends", // COmey
-                "The Office",// COmey
-                "Stranger Things", // Fantasy
-                "The Crown", // DRama
-                "The Big Bang Theory", // COmey
-                "The Simpsons", // Animation
-                "The Walking Dead", // Horror
-                "Westworld", // Sci-fi
+                    "Breaking Bad", // DRAMA
+                    "Game of Thrones", // Fantasy
+                    "Friends", // COmey
+                    "The Office", // COmey
+                    "Stranger Things", // Fantasy
+                    "The Crown", // DRama
+                    "The Big Bang Theory", // COmey
+                    "The Simpsons", // Animation
+                    "The Walking Dead", // Horror
+                    "Westworld", // Sci-fi
             };
 
             String[] descriptionsContents = {
@@ -82,19 +81,14 @@ public class DefaultRecordsPopulator implements CommandLineRunner {
             };
             int[] seasonsContents = { 5, 8, 10, 9, 4, 4, 12, 34, 11, 4 };
 
-            String[] genresContents = {
-                    "Drama",
-                    "Fantasy",
-                    "Comedy",
-                    "Animation",
-                    "Horror",
-                    "Sci-Fi"
-            };
+            String[] genresContents = { "Drama", "Fantasy", "Comedy", "Animation", "Horror", "Sci-Fi" };
 
             for (String genre : genresContents) {
-                Category category = new Category();
-                category.setName(genre);
-                categoryRepository.save(category);
+                if (categoryRepository.findByName(genre) == null) {
+                    Category category = new Category();
+                    category.setName(genre);
+                    categoryRepository.save(category);
+                }
             }
 
             LocalDate[] productionDateContent = {
@@ -110,22 +104,31 @@ public class DefaultRecordsPopulator implements CommandLineRunner {
                     LocalDate.of(2016, 10, 2)
             };
 
-            String[] durationsContents = {
-                    "45 min", "60 min", "22 min", "30 min", "50 min", "60 min", "20 min", "25 min", "40 min",
-                    "55 min"
+            int[][] durationsContents = {
+                    // give me the quantity of ep for seasonContents
+                    { 10, 10, 10, 10, 10 }, // 5 seasons
+                    { 12, 12, 12, 12, 12, 12, 12, 12 }, // 8 seasons
+                    { 15, 15, 15, 15, 15, 15, 15, 15, 15, 15 }, // 10 seasons
+                    { 20, 20, 20, 20, 20, 20, 20, 20, 20 }, // 9 seasons
+                    { 25, 25, 25, 25 }, // 4 seasons
+                    { 30, 30, 30, 30 }, // 4 seasons
+                    { 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35 }, // 12 seasons
+                    { 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40 }, // 11 seasons
+                    { 12, 12, 15, 18, 8, 10, 18, 45, 45, 45 }, // 10 seasons
+                    { 10, 12, 20, 15 } // 4 seasons
             };
 
             String[] imagesContents = {
-                "http://localhost:8080/assets/images/content/breaking.jpg",
-                "http://localhost:8080/assets/images/content/thrones.jpeg",
-                "http://localhost:8080/assets/images/content/friend.jpg",
-                "http://localhost:8080/assets/images/content/the-office.jpeg",
-                "http://localhost:8080/assets/images/content/stranger-things.jpeg",
-                "http://localhost:8080/assets/images/content/crown.jpeg",
-                "http://localhost:8080/assets/images/content/big.jpeg",
-                "http://localhost:8080/assets/images/content/simpsons.jpg",
-                "http://localhost:8080/assets/images/content/walking.jpg",
-                "http://localhost:8080/assets/images/content/westworld.jpeg",
+                    "http://localhost:8080/assets/images/content/breaking.jpg",
+                    "http://localhost:8080/assets/images/content/thrones.jpeg",
+                    "http://localhost:8080/assets/images/content/friend.jpg",
+                    "http://localhost:8080/assets/images/content/the-office.jpeg",
+                    "http://localhost:8080/assets/images/content/stranger-things.jpeg",
+                    "http://localhost:8080/assets/images/content/crown.jpeg",
+                    "http://localhost:8080/assets/images/content/big.jpeg",
+                    "http://localhost:8080/assets/images/content/simpsons.jpg",
+                    "http://localhost:8080/assets/images/content/walking.jpg",
+                    "http://localhost:8080/assets/images/content/westworld.jpeg",
             };
 
             List<Content> contents = new ArrayList<Content>(10);
@@ -138,26 +141,41 @@ public class DefaultRecordsPopulator implements CommandLineRunner {
                 content.setSeason(seasonsContents[i]);
                 content.setDescription(descriptionsContents[i]);
                 content.setImage(imagesContents[i]);
-                content.setDuration(durationsContents[i]);
+                System.out.println(durationsContents[i]);
                 content.setCreatedAt(LocalDateTime.now());
                 content.setUpdatedAt(LocalDateTime.now());
-                contents.add(content);
 
+                Category category;
                 if (i == 0 || i == 5) {
-                    content.setCategory(categoryRepository.findByName("Drama"));
+                    category = categoryRepository.findByName("Drama");
                 } else if (i == 1 || i == 4 || i == 9) {
-                    content.setCategory(categoryRepository.findByName("Fantasy"));
+                    category = categoryRepository.findByName("Fantasy");
                 } else if (i == 2 || i == 3 || i == 6) {
-                    content.setCategory(categoryRepository.findByName("Comedy"));
+                    category = categoryRepository.findByName("Comedy");
                 } else if (i == 8) {
-                    content.setCategory(categoryRepository.findByName("Horror"));
+                    category = categoryRepository.findByName("Horror");
                 } else if (i == 9) {
-                    content.setCategory(categoryRepository.findByName("Sci-Fi"));
+                    category = categoryRepository.findByName("Sci-Fi");
                 } else {
-                    content.setCategory(categoryRepository.findByName("Animation"));
+                    category = categoryRepository.findByName("Animation");
                 }
+
+                if (category != null) {
+                    content.setCategory(category);
+                }
+
+                List<ContentSeason> contentSeasons = new ArrayList<ContentSeason>();
+                for (int qtdEp : durationsContents[i]) {
+                    ContentSeason duration = new ContentSeason();
+                    duration.setEpisode(qtdEp);
+                    duration.setContent(content);
+                    contentSeasons.add(duration);
+                }
+
+                contentRepository.saveAndFlush(content);
+                contentSeasonRepository.saveAllAndFlush(contentSeasons);
             }
-            contentRepository.saveAllAndFlush(contents);
+
         }
     }
 }

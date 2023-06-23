@@ -17,8 +17,6 @@ import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -42,9 +40,6 @@ public class Content {
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false)
-    private String duration;
-
     @Column(nullable = true)
     @Nullable
     private int season;
@@ -60,6 +55,10 @@ public class Content {
     @OneToMany(mappedBy = "content", cascade = CascadeType.ALL)
     @OrderBy("id DESC")
     private List<Review> reviews;
+
+    @OneToMany(mappedBy = "content", cascade = CascadeType.REMOVE)
+    @OrderBy("id DESC")
+    private List<ContentSeason> contentSeason;
 
     @ManyToOne
     private Category category;
@@ -89,6 +88,11 @@ public class Content {
     @JsonManagedReference
     public List<Review> getReviews() {
         return reviews;
+    }
+
+    @JsonManagedReference
+    public List<ContentSeason> getContentSeasons() {
+        return contentSeason;
     }
 
     @JsonBackReference
