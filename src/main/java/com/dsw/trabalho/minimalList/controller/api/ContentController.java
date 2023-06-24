@@ -37,7 +37,6 @@ public class ContentController {
         @RequestParam(required = false) Integer season,
         @RequestParam(required = false) Integer category
     ) {
-        System.out.println(title + " " + name + " " + season + " " + category);
         List<Content> content = contentRepository.searchContent(title, name, season, category);
         return ResponseEntity.status(HttpStatus.OK).body(content);
     }

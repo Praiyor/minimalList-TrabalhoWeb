@@ -131,8 +131,6 @@ public class DefaultRecordsPopulator implements CommandLineRunner {
                     "http://localhost:8080/assets/images/content/westworld.jpeg",
             };
 
-            List<Content> contents = new ArrayList<Content>(10);
-
             for (int i = 0; i < namesContents.length; i++) {
                 Content content = new Content();
                 content.setName(namesContents[i]);
@@ -141,7 +139,6 @@ public class DefaultRecordsPopulator implements CommandLineRunner {
                 content.setSeason(seasonsContents[i]);
                 content.setDescription(descriptionsContents[i]);
                 content.setImage(imagesContents[i]);
-                System.out.println(durationsContents[i]);
                 content.setCreatedAt(LocalDateTime.now());
                 content.setUpdatedAt(LocalDateTime.now());
 

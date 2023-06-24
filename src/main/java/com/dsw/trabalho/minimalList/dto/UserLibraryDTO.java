@@ -14,6 +14,6 @@ public class  UserLibraryDTO {
     @NotEmpty(message = "Episódio é obrigatório")
     private String episode;
     @NotEmpty(message = "Status é obrigatório")
-    private String statusContent;
+    private String seasonContent;
 }
 

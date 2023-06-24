@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.annotation.Nullable;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -60,13 +61,13 @@ public class User {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade=CascadeType.ALL)
     private List<Review> reviews;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade=CascadeType.ALL)
     private List<Achievement> achievements;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade=CascadeType.ALL)
     private List<UserLibrary> libraries;
 
     private String token;
@@ -74,17 +75,17 @@ public class User {
     private String imagePath;
 
     public String getImagePathComplete() {
-        String path = "http://localhost:8080/";
-        if (image  == null) return path + "/images/default.png";
+        String path = "http://localhost:8080";
+        if (image  == null) return path + "/assets/images/default.png";
 
-        return path + imagePath + "/"+ image;
+        return path + "/" + imagePath + "/"+ image;
     }
 
     public String getBackgroundPathComplete() {
-        String path = "http://localhost:8080/";
-        if (background == null) return path + "/images/background.png";
+        String path = "http://localhost:8080";
+        if (background == null) return path + "/assets/images/background.png";
 
-        return path + imagePath + "/"+ background;
+        return path + "/" + imagePath + "/"+ background;
     }
 
     @PrePersist

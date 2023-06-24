@@ -55,7 +55,7 @@ public class UserLibraryController {
         library.setUser(user);
         library.setContent(content);
         library.setEpisode(libraryDTO.getEpisode());
-        library.setStatusCotent(libraryDTO.getStatusContent());
+        library.setSeasonContent(libraryDTO.getSeasonContent());
         
         return ResponseEntity.status(HttpStatus.CREATED).body(repository.save(library));
     }
@@ -68,7 +68,7 @@ public class UserLibraryController {
             throw new HandleException("Usuário ou Conteudo não foi Encontrado!");
         }
 
-        userLibrary.setStatusCotent(libraryDTO.getStatusContent());
+        userLibrary.setSeasonContent(libraryDTO.getSeasonContent());
         userLibrary.setEpisode(libraryDTO.getEpisode());
 
         return ResponseEntity.status(HttpStatus.OK).body(repository.save(userLibrary));

@@ -31,7 +31,7 @@ public class UserLibrary {
     @GeneratedValue
     private Integer id;
     private String episode;
-    private String statusCotent;
+    private String seasonContent;
     
     @OneToOne
     private Content content;

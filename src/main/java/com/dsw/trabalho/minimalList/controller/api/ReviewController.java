@@ -11,6 +11,7 @@ import com.dsw.trabalho.minimalList.repository.UserRepository;
 import jakarta.validation.Valid;
 import java.util.List;
 import java.util.Optional;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,16 +34,22 @@ public class ReviewController {
     private final ContentRepository contentRepository;
 
     @GetMapping("/user/{userId}")
-    public ResponseEntity<Object> findAllReviewsByUser(@PathVariable Integer userId) throws HandleException {
-        User user = userRepository.findById(userId).orElseThrow(() -> new HandleException("Usuário não foi encontrado!"));
+    public ResponseEntity<Object> findAllReviewsByUser(@PathVariable Integer userId)
+            throws HandleException {
+        User user = userRepository
+                .findById(userId)
+                .orElseThrow(() -> new HandleException("Usuário não foi encontrado!"));
         List<Review> reviews = repository.findAllReviewsByUser(user);
 
         return ResponseEntity.status(HttpStatus.OK).body(reviews);
     }
 
     @GetMapping("/content/{contentId}")
-    public ResponseEntity<Object> findAllReviewsByContent(@PathVariable Integer contentId) throws HandleException {
-        Content content = contentRepository.findById(contentId).orElseThrow(() -> new HandleException("Conteudo não foi encontrado!"));
+    public ResponseEntity<Object> findAllReviewsByContent(@PathVariable Integer contentId)
+            throws HandleException {
+        Content content = contentRepository
+                .findById(contentId)
+                .orElseThrow(() -> new HandleException("Conteudo não foi encontrado!"));
         List<Review> review = repository.findAllByContent(content);
 
         return ResponseEntity.status(HttpStatus.OK).body(review);
@@ -52,7 +59,9 @@ public class ReviewController {
     public ResponseEntity<Object> update(
             @PathVariable(value = "id") Integer id, @RequestBody @Valid ReviewRequestDTO reviewDto)
             throws HandleException {
-        Review review = repository.findById(id).orElseThrow(() -> new HandleException("Review não foi encontrada!"));
+        Review review = repository
+                .findById(id)
+                .orElseThrow(() -> new HandleException("Review não foi encontrada!"));
         Review reviewVerify = repository.findByUserAndContent(reviewDto.getIdUser(), reviewDto.getIdContent());
 
         if (review != reviewVerify)
@@ -68,15 +77,32 @@ public class ReviewController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> delete(@PathVariable(value = "id") Integer id) {
-        repository.deleteById(id);
+        Optional<Review> review = repository.findById(id);
+
+        if (!review.isPresent()) {
+            return ResponseEntity.status(HttpStatus.OK).body("Review não deletado!");
+        }
+        repository.delete(review.get());
         return ResponseEntity.status(HttpStatus.OK).body("Review deletada!");
     }
 
     @PostMapping
-    public ResponseEntity<Object> addReview(@RequestBody @Valid ReviewRequestDTO reviewDto) throws HandleException {
-        User user = userRepository.findById(reviewDto.getIdUser()).orElseThrow(() -> new HandleException("Usuário não foi encontrado!"));
-        Content content = contentRepository.findById(reviewDto.getIdContent()).orElseThrow(() -> new HandleException("Conteudo não foi encontrado!"));
-        Review review = repository.findByUserAndContent(user, content).orElseThrow(() -> new HandleException("Review não foi encontrada!"));
+    public ResponseEntity<Object> addReview(@RequestBody @Valid ReviewRequestDTO reviewDto)
+            throws HandleException {
+        User user = userRepository
+                .findById(reviewDto.getIdUser())
+                .orElseThrow(() -> new HandleException("Usuário não foi encontrado!"));
+        Content content = contentRepository
+                .findById(reviewDto.getIdContent())
+                .orElseThrow(() -> new HandleException("Conteudo não foi encontrado!"));
+        Review reviewExist = repository.findByUserAndContent(reviewDto.getIdUser(), reviewDto.getIdContent());
+
+        Review review = null;
+        if (reviewExist == null) {
+            review = new Review();
+        } else {
+            review = reviewExist;
+        }
 
         review.setContent(content);
         review.setUser(user);
