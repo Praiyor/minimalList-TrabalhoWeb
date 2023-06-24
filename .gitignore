@@ -33,6 +33,7 @@ build/
 .vscode/
 
 ## Images
-assets/images/**
+assets/images/profile/**
+!assets/images/content/*
 !assets/images/default.*
 !assets/images/background.*
