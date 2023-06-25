@@ -50,8 +50,15 @@ public class UserLibraryController {
     public ResponseEntity<Object> add(@RequestBody @Valid UserLibraryDTO libraryDTO) throws HandleException {
         User user = userRepository.findById(libraryDTO.getIdUser()).orElseThrow(() -> new HandleException("Usuário não foi encontrado"));
         Content content = contentRepository.findById(libraryDTO.getIdContent()).orElseThrow(() -> new HandleException("Conteudo não foi encontrado"));
+        UserLibrary oldLibrary = repository.findByUserAndContent(user, content).orElse(null);
+        UserLibrary library;
 
-        UserLibrary library = new UserLibrary();
+        if (oldLibrary != null) {
+            library = oldLibrary;
+        } else {
+            library = new UserLibrary();
+        }
+
         library.setUser(user);
         library.setContent(content);
         library.setEpisode(libraryDTO.getEpisode());
