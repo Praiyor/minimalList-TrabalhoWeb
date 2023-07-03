@@ -69,6 +69,14 @@ public class Review {
             String path = "http://localhost:8080";
             return path + "/assets/images/default.png";
         }
-        return user.getImage();
+        return user.getImagePathComplete();
+    }
+
+    public Integer getUserId() {
+        if (user == null) {
+            return 0;
+        }
+
+        return user.getId();
     }
 }
